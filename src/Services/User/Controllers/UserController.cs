@@ -42,6 +42,7 @@ public class UserController : ControllerBase
     [HttpDelete("{id}")]
     public IActionResult Delete(string id)
     {
-        throw new NotImplementedException();
+        _userService.Delete(id);
+        return Ok();
     }
 }

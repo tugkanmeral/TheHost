@@ -37,4 +37,10 @@ public class UserRepository : IUserRepository, IMongoDbRepository<User>
     {
         Collection.InsertOne(user);
     }
+
+    public void Delete(string id)
+    {
+        var filter = Builders<User>.Filter.Eq(x => x.Id, id);
+        Collection.DeleteOne(filter);
+    }
 }

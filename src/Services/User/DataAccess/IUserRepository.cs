@@ -4,4 +4,5 @@ public interface IUserRepository
     User GetById(string id);
     IEnumerable<User> Get();
     void Insert(User user);
+    void Delete(string id);
 }
