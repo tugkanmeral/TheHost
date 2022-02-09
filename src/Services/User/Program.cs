@@ -1,0 +1,81 @@
+global using System.Text;
+global using MongoDB.Bson;
+global using MongoDB.Driver;
+
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+
+builder.Services.AddControllers();
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("CorsPolicy",
+                builder => builder
+                .SetIsOriginAllowed((host) => true)
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials());
+        });
+
+builder.Services.AddSingleton(s =>
+{
+    AppSettings appSettings = new();
+    builder.Configuration.Bind("Salt", appSettings.Salt);
+    appSettings.IV = s.GetRequiredService<IConfiguration>()["IV"];
+    appSettings.MongoUri = s.GetRequiredService<IConfiguration>()["MongoUri"];
+    appSettings.AuthSecretKey = s.GetRequiredService<IConfiguration>()["AuthSecretKey"];
+    return appSettings;
+});
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserManager>();
+builder.Services.AddSingleton<IMongoClient, MongoClient>(s =>
+{
+    var uri = s.GetRequiredService<IConfiguration>()["MongoUri"];
+    return new MongoClient(uri);
+});
+
+var secretKey = Encoding.ASCII.GetBytes(builder.Configuration.GetSection("AuthSecretKey").Value);
+builder.Services.AddAuthentication(x =>
+{
+    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(x =>
+{
+    x.RequireHttpsMetadata = false;
+    x.SaveToken = true;
+    x.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(secretKey),
+        ValidateIssuer = false,
+        ValidateAudience = false
+    };
+});
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+app.UseHttpsRedirection();
+
+app.UseCors("CorsPolicy");
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapControllers();
+
+app.Run();

@@ -1,7 +1,6 @@
 appsettings.*
 *.exe
 bin/
-User/
 the-host-react-js/
 
 ## Above wroten by TM
