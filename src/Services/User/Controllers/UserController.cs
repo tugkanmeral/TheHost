@@ -32,6 +32,7 @@ public class UserController : ControllerBase
 
     // POST api/<UserController>
     [HttpPost]
+    [AllowAnonymous]
     public IActionResult Post([FromBody] User user)
     {
         _userService.InsertUser(user);
