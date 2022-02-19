@@ -1,12 +1,33 @@
 @page "/login"
 @inject IJSRuntime JsRuntime
+@inject HttpClient Http
+@inject StateContainer StateContainer
+@inject NavigationManager NavigationManager
 
 <PageTitle>Login</PageTitle>
 
 <h1>Login</h1>
-<input @bind="Username" />
-<input @bind="Password" />
-<input @bind="MasterKey" />
+<div class="input-group mb-3">
+    <div class="input-group-prepend">
+        <span class="input-group-text" id="login-username">U</span>
+    </div>
+    <input type="text" class="form-control" placeholder="Username" aria-label="Username"
+        aria-describedby="login-username" @bind="Username">
+</div>
+<div class="input-group mb-3">
+    <div class="input-group-prepend">
+        <span class="input-group-text" id="login-password">P</span>
+    </div>
+    <input type="password" class="form-control" placeholder="Password" aria-label="Password"
+        aria-describedby="login-password" @bind="Password">
+</div>
+<div class="input-group mb-3">
+    <div class="input-group-prepend">
+        <span class="input-group-text" id="login-masterkey">M</span>
+    </div>
+    <input type="password" class="form-control" placeholder="MasterKey" aria-label="MasterKey"
+        aria-describedby="login-masterkey" @bind="MasterKey">
+</div>
 
 <button class="btn btn-primary" @onclick="LoginClicked">Login</button>
 
@@ -17,6 +38,39 @@
 
     private async Task LoginClicked()
     {
-        await JsRuntime.InvokeVoidAsync("alert", Username);
+        @* await JsRuntime.InvokeVoidAsync("alert", Username + ' ' + Password + ' ' + MasterKey); *@
+
+        var loginModel = new LoginModel(Username, Password, MasterKey);
+        var result = await Http.PostAsJsonAsync("https://localhost:7244/api/auth/getToken", loginModel);
+        if (!result.IsSuccessStatusCode)
+            return;
+
+        var token = await result.Content.ReadAsStringAsync();
+
+        // convert response data to JsonElement which can handle any JSON data
+        //var data = await result.Content.ReadFromJsonAsync<JsonElement>();
+
+        // get id property from JSON response data
+        //Result = data.GetProperty("data").GetString();
+
+        if (String.IsNullOrWhiteSpace(token))
+            return;
+
+        StateContainer.Token = token;
+        NavigationManager.NavigateTo("/");
+        await JsRuntime.InvokeVoidAsync("alert", token);
+    }
+
+    public class LoginModel
+    {
+        public LoginModel(string username, string password, string masterKey)
+        {
+            Username = username;
+            Password = password;
+            MasterKey = masterKey;
+        }
+        public string Username { get; set; } = "";
+        public string Password { get; set; } = "";
+        public string MasterKey { get; set; } = "";
     }
 }

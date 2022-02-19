@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver;
 
+string policyName = "TheHostPolicy";
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -11,16 +12,6 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-builder.Services.AddCors(options =>
-        {
-            options.AddPolicy("CorsPolicy",
-                builder => builder
-                .SetIsOriginAllowed((host) => true)
-                .AllowAnyMethod()
-                .AllowAnyHeader()
-                .AllowCredentials());
-        });
 
 builder.Services.AddSingleton(s =>
 {
@@ -39,6 +30,19 @@ builder.Services.AddSingleton<IMongoClient, MongoClient>(s =>
     return new MongoClient(uri);
 });
 
+// "AllowedHosts": "http://localhost:3000,http://localhost:5000" in appsettings.json
+var allowedHosts = builder.Configuration.GetSection("AllowedHosts").Value.Trim().Split(",");
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: policyName,
+                      builder =>
+                      {
+                          builder
+                            .WithOrigins(allowedHosts)
+                            .AllowAnyMethod()
+                            .AllowAnyHeader();
+                      });
+});
 
 var secretKey = Encoding.ASCII.GetBytes(builder.Configuration.GetSection("AuthSecretKey").Value);
 builder.Services.AddAuthentication(x =>
@@ -70,7 +74,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseCors("CorsPolicy");
+app.UseCors(policyName);
 
 app.UseAuthentication();
 app.UseAuthorization();

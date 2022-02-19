@@ -1,4 +1,6 @@
 ﻿@page "/"
+@inject StateContainer StateContainer
+@inject IJSRuntime JsRuntime
 
 <PageTitle>Index</PageTitle>
 
@@ -7,3 +9,12 @@
 Welcome to your new app.
 
 <SurveyPrompt Title="How is Blazor working for you?" />
+
+<button class="btn btn-primary" @onclick="ShowToken">Show token</button>
+
+@code {
+    public async Task ShowToken()
+    {
+        await JsRuntime.InvokeVoidAsync("alert", StateContainer.Token);
+    }
+}

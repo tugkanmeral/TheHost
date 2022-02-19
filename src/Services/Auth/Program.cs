@@ -2,6 +2,7 @@ global using MongoDB.Bson;
 global using MongoDB.Driver;
 global using System.Text;
 
+string policyName = "TheHostPolicy";
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
@@ -27,6 +28,20 @@ builder.Services.AddSingleton<IMongoClient, MongoClient>(s =>
     return new MongoClient(uri);
 });
 
+// "AllowedHosts": "http://localhost:3000,http://localhost:5000" in appsettings.json
+var allowedHosts = builder.Configuration.GetSection("AllowedHosts").Value.Trim().Split(",");
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: policyName,
+                      builder =>
+                      {
+                          builder
+                            .WithOrigins(allowedHosts)
+                            .AllowAnyMethod()
+                            .AllowAnyHeader();
+                      });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -37,6 +52,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors(policyName);
 
 app.UseAuthorization();
 
