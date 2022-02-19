@@ -1,0 +1,22 @@
+@page "/login"
+@inject IJSRuntime JsRuntime
+
+<PageTitle>Login</PageTitle>
+
+<h1>Login</h1>
+<input @bind="Username" />
+<input @bind="Password" />
+<input @bind="MasterKey" />
+
+<button class="btn btn-primary" @onclick="LoginClicked">Login</button>
+
+@code {
+    private string? Username { get; set; }
+    private string? Password { get; set; }
+    private string? MasterKey { get; set; }
+
+    private async Task LoginClicked()
+    {
+        await JsRuntime.InvokeVoidAsync("alert", Username);
+    }
+}
