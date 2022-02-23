@@ -1,5 +1,7 @@
 ﻿@page "/fetchdata"
 @inject HttpClient Http
+@inject IJSRuntime JsRuntime
+@inject StateContainer StateContainer
 
 <PageTitle>Weather forecast</PageTitle>
 
@@ -36,14 +38,14 @@ else
     </table>
 }
 
+
 @code {
     private WeatherForecast[]? forecasts;
-
     protected override async Task OnInitializedAsync()
     {
         forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("sample-data/weather.json");
-    }
 
+    }
     public class WeatherForecast
     {
         public DateTime Date { get; set; }

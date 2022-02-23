@@ -1,4 +1,9 @@
-﻿@inherits LayoutComponentBase
+﻿@using System.Net.Http.Headers
+@inherits LayoutComponentBase
+@inject HttpClient Http
+@inject IJSRuntime JsRuntime
+@inject StateContainer StateContainer
+@inject NavigationManager NavigationManager
 
 <div class="page">
     <div class="sidebar">
@@ -15,3 +20,23 @@
         </article>
     </main>
 </div>
+
+@code {
+    private LocalStorageManager localStorage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        localStorage = new LocalStorageManager(JsRuntime);
+        var token = await localStorage.GetAsync<string>("token");
+        if (!String.IsNullOrWhiteSpace(token))
+        {
+            StateContainer.Token = token;
+            Http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
+            NavigationManager.NavigateTo("/");
+        }
+        else
+        {
+            NavigationManager.NavigateTo("/Login");
+        }
+    }
+}

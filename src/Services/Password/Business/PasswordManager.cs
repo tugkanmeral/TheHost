@@ -110,6 +110,11 @@ public class PasswordManager : IPasswordService
             existPassword.Pass = Crypto.Encrypt(saltedNewPass, masterKey, _appSettings.IV);
         }
 
+        if (!String.IsNullOrWhiteSpace(password.Detail) & password.Detail != existPassword.Detail) // detail changed
+        {
+            existPassword.Detail = password.Detail;
+        }
+
         existPassword.LastUpdateDate = DateTime.Now.ToString();
 
         try
