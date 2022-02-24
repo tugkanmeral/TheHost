@@ -22,14 +22,14 @@
 </div>
 
 @code {
-    private LocalStorageManager localStorage;
+    private LocalStorageManager localStorageManager;
 
     protected override async Task OnInitializedAsync()
     {
         await buildRoutingState();
 
-        localStorage = new LocalStorageManager(JsRuntime);
-        var token = await localStorage.GetAsync<string>("token");
+        localStorageManager = new LocalStorageManager(JsRuntime);
+        var token = await localStorageManager.GetAsync<string>("token");
         if (!String.IsNullOrWhiteSpace(token))
         {
             StateContainer.Token = token;
