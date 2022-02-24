@@ -1,19 +1,26 @@
 ﻿public class StateContainer
 {
     private string? token;
-
     public string Token
     {
         get => token ?? string.Empty;
         set
         {
             token = value;
-            NotifyStateChanged();
+            NotifyTokenStateChanged();
         }
     }
+    public event Action? OnTokenChange;
+    private void NotifyTokenStateChanged() => OnTokenChange?.Invoke();
 
-    public event Action? OnChange;
-
-    private void NotifyStateChanged() => OnChange?.Invoke();
+    private HashSet<TheHostRouteModel>? routes;
+    public HashSet<TheHostRouteModel>? Routes
+    {
+        get => routes ?? new();
+        set
+        {
+            routes = value;
+        }
+    }
 }
 

@@ -26,6 +26,8 @@
 
     protected override async Task OnInitializedAsync()
     {
+        await buildRoutingState();
+
         localStorage = new LocalStorageManager(JsRuntime);
         var token = await localStorage.GetAsync<string>("token");
         if (!String.IsNullOrWhiteSpace(token))
@@ -38,5 +40,10 @@
         {
             NavigationManager.NavigateTo("/Login");
         }
+    }
+
+    private async Task buildRoutingState()
+    {
+        StateContainer.Routes = await Http.GetFromJsonAsync<HashSet<TheHostRouteModel>>("data/routes.json");
     }
 }

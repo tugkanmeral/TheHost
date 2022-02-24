@@ -1,0 +1,32 @@
+[{
+    "service": "Auth",
+    "url": "https://localhost:7244/",
+    "endPoints": [
+        {
+            "name": "getToken",
+            "url": "api/auth/getToken"
+        }
+    ]
+},
+{
+    "service": "Password",
+    "url": "https://localhost:7109/",
+    "endPoints": [
+        {
+            "name": "passwordInsert",
+            "url": "api/passwords"
+        },
+        {
+            "name": "passwordUpdate",
+            "url": "api/passwords/"
+        },
+        {
+            "name": "passwords",
+            "url": "api/passwords"
+        },
+        {
+            "name": "password",
+            "url": "api/passwords/"
+        }
+    ]
+}]
