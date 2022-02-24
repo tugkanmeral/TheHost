@@ -27,6 +27,10 @@
         {
             "name": "password",
             "url": "api/passwords/"
+        },
+        {
+            "name": "passwordDelete",
+            "url": "api/passwords/"
         }
     ]
 }]
