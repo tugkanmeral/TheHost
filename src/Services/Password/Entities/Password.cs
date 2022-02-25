@@ -13,4 +13,5 @@ public class Password
     public string Pass { get; set; } = String.Empty;
     public string CreationDate { get; set; } = String.Empty;
     public string? LastUpdateDate { get; set; }
+    public string OwnerId { get; set; } = String.Empty;
 }

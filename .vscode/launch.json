@@ -2,13 +2,33 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": ".NET Core Launch (web)",
+            "name": "Password Service",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
             "program": "${workspaceFolder}/src/Services/Password/bin/Debug/net6.0/Password.dll",
             "args": [],
             "cwd": "${workspaceFolder}/src/Services/Password",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/Views"
+            }
+        },
+        {
+            "name": "Auth Service",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/src/Services/Auth/bin/Debug/net6.0/Auth.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/Services/Auth",
             "stopAtEntry": false,
             "serverReadyAction": {
                 "action": "openExternally",

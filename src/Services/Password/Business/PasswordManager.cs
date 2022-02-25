@@ -1,4 +1,5 @@
 using System.Security.Cryptography;
+using System.Security.Claims;
 using En = Password.Entities;
 using System.Text;
 
@@ -12,19 +13,19 @@ public class PasswordManager : IPasswordService
         _appSettings = appSettings;
     }
 
-    public void DeletePassword(string id)
+    public void DeletePassword(string id, string userId)
     {
-        _passwordRepository.Delete(id);
+        _passwordRepository.Delete(userId, id);
     }
 
-    public En.Password GetPassword(string id, string masterKey)
+    public En.Password GetPassword(string id, string userId, string masterKey)
     {
         if (String.IsNullOrWhiteSpace(masterKey))
         {
             throw new Exception("Enter master key before all");
         }
 
-        var password = _passwordRepository.Get(id);
+        var password = _passwordRepository.Get(userId, id);
 
         try
         {
@@ -49,12 +50,12 @@ public class PasswordManager : IPasswordService
         return password;
     }
 
-    public List<En.Password> GetPasswords()
+    public List<En.Password> GetPasswords(string userId)
     {
         List<En.Password> passwords = new();
         try
         {
-            passwords = _passwordRepository.Get();
+            passwords = _passwordRepository.Get(userId);
         }
         catch (Exception)
         {
@@ -64,7 +65,7 @@ public class PasswordManager : IPasswordService
         return passwords;
     }
 
-    public void InsertPassword(En.Password password, string masterKey)
+    public void InsertPassword(En.Password password, string userId, string masterKey)
     {
         if (String.IsNullOrWhiteSpace(masterKey))
         {
@@ -78,6 +79,7 @@ public class PasswordManager : IPasswordService
 
         password.Pass = Crypto.Encrypt(password.Pass, masterKey, _appSettings.IV);
         password.CreationDate = DateTime.Now.ToString();
+        password.OwnerId = userId;
 
         try
         {
@@ -89,14 +91,14 @@ public class PasswordManager : IPasswordService
         }
     }
 
-    public void UpdatePassword(En.Password password, string masterKey)
+    public void UpdatePassword(En.Password password, string userId, string masterKey)
     {
         if (String.IsNullOrWhiteSpace(masterKey))
         {
             throw new Exception("Enter master key before all");
         }
 
-        var existPassword = _passwordRepository.Get(password.Id);
+        var existPassword = _passwordRepository.Get(userId, password.Id);
         if (existPassword == null)
             throw new Exception("Password could not find!");
 

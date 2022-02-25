@@ -26,4 +26,9 @@ public static class Utils
         masterKey = user.Claims.FirstOrDefault(c => c.Type == CustomClaimTypes.MASTER_KEY)?.Value;
         return masterKey ?? string.Empty;
     }
+
+    public static string GetUserId(this ClaimsPrincipal user)
+    {
+        return user.Claims.Where(x => x.Type == ClaimTypes.NameIdentifier).Single().Value ?? String.Empty;
+    }
 }

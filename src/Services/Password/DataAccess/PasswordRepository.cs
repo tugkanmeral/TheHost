@@ -14,28 +14,29 @@ public class PasswordRepository : IPasswordRepository, IMongoDbRepository<En.Pas
         Collection = Database.GetCollection<En.Password>("Passwords");
     }
 
-    public void Delete(string id)
+    public void Delete(string userId, string id)
     {
-        var filter = Builders<En.Password>.Filter.Eq(p => p.Id, id);
+        var filter = Builders<En.Password>.Filter.Eq(p => p.Id, id) & Builders<En.Password>.Filter.Eq(p => p.OwnerId, userId);
         Collection.DeleteOne(filter);
     }
 
-    public En.Password Get(string id)
+    public En.Password Get(string userId, string id)
     {
-        var filter = Builders<En.Password>.Filter.Eq(p => p.Id, id);
+        var filter = Builders<En.Password>.Filter.Eq(p => p.Id, id) & Builders<En.Password>.Filter.Eq(p => p.OwnerId, userId);
         var password = Collection.Find(filter).FirstOrDefault();
         return password;
     }
 
-    public List<En.Password> Get()
+    public List<En.Password> Get(string userId)
     {
-        var filter = Builders<En.Password>.Filter.Empty;
+        var filter = Builders<En.Password>.Filter.Eq(p => p.OwnerId, userId);
         var projection = Builders<En.Password>.Projection
         .Include(x => x.Title)
         .Include(x => x.Username)
         .Include(x => x.Detail)
         .Include(x => x.LastUpdateDate)
-        .Include(x => x.CreationDate);
+        .Include(x => x.CreationDate)
+        .Include(x => x.OwnerId);
         var passwords = Collection.Find(filter).Project<En.Password>(projection).ToList();
 
         return passwords;
