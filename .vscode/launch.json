@@ -2,7 +2,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Password Service",
+            "name": "Password Service Web API",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
@@ -22,7 +22,7 @@
             }
         },
         {
-            "name": "Auth Service",
+            "name": "Auth Service Web API",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
