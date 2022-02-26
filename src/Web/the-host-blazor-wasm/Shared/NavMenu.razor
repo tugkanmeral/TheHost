@@ -1,5 +1,6 @@
 ﻿@inject IJSRuntime JsRuntime
 @inject StateContainer StateContainer
+@inject NavigationManager NavigationManager
 
 <div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
@@ -22,6 +23,11 @@
             <div class="nav-item px-3">
                 <NavLink class="nav-link" href="password">
                     <span class="oi oi-list-rich" aria-hidden="true"></span> Password
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" style="background-color: darkred; color: whitesmoke;" @onclick="logout">
+                    <span class="oi oi-list-rich" aria-hidden="true"></span> Logout
                 </NavLink>
             </div>
         }
@@ -63,8 +69,24 @@
         if (!String.IsNullOrWhiteSpace(StateContainer.Token))
         {
             isLoggedIn = true;
-            StateHasChanged();
+        }
+        else
+        {
+            isLoggedIn = false;
         }
 
+        StateHasChanged();
+    }
+
+    private async Task logout()
+    {
+        if (localStorageManager == null)
+            throw new Exception("LocalStorageManager error!");
+
+        await localStorageManager.ClearAsync();
+        StateContainer.Token = String.Empty;
+
+        StateHasChanged();
+        NavigationManager.NavigateTo("/Login");
     }
 }
