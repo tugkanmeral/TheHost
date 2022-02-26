@@ -33,7 +33,7 @@
 <button class="btn btn-primary" @onclick="LoginClicked">Login</button>
 
 @code {
-    private LocalStorageManager localStorageManager;
+    private LocalStorageManager? localStorageManager;
     private string? Username { get; set; }
     private string? Password { get; set; }
     private string? MasterKey { get; set; }
@@ -53,7 +53,12 @@
 
     private async Task LoginClicked()
     {
-        @* await JsRuntime.InvokeVoidAsync("alert", Username + ' ' + Password + ' ' + MasterKey); *@
+        if (String.IsNullOrWhiteSpace(Username))
+            return;
+        if (String.IsNullOrWhiteSpace(Password))
+            return;
+        if (String.IsNullOrWhiteSpace(MasterKey))
+            return;
 
         var loginModel = new LoginModel(Username, Password, MasterKey);
         var result = await Http.PostAsJsonAsync("https://localhost:7244/api/auth/getToken", loginModel);
@@ -62,16 +67,11 @@
 
         var token = await result.Content.ReadAsStringAsync();
 
-        // convert response data to JsonElement which can handle any JSON data
-        //var data = await result.Content.ReadFromJsonAsync<JsonElement>();
-
-        // get id property from JSON response data
-        //Result = data.GetProperty("data").GetString();
-
         if (String.IsNullOrWhiteSpace(token))
             return;
 
         StateContainer.Token = token;
+
         await localStorageManager.RemoveAsync("token");
         await localStorageManager.SetAsync<string>("token", token);
 
