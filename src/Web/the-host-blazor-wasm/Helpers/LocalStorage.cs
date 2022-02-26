@@ -14,9 +14,11 @@ public class LocalStorageManager
     {
         string? jsVal = null;
         if (value != null)
+        {
             jsVal = JsonSerializer.Serialize(value);
-        await _jsRuntime.InvokeVoidAsync("localStorage.setItem",
-            new object[] { key, jsVal });
+            await _jsRuntime.InvokeVoidAsync("localStorage.setItem",
+                new object[] { key, jsVal });
+        }
     }
     public async Task<T?> GetAsync<T>(string key)
     {
@@ -24,7 +26,10 @@ public class LocalStorageManager
         if (val == null)
             return default;
 
-        T result = JsonSerializer.Deserialize<T>(val);
+        T? result = JsonSerializer.Deserialize<T?>(val);
+        if (result == null)
+            return default;
+
         return result;
     }
     public async Task RemoveAsync(string key)
