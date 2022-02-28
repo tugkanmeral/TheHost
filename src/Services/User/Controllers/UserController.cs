@@ -15,20 +15,20 @@ public class UserController : ControllerBase
     }
 
     // GET: api/<UserController>
-    [HttpGet]
-    public IActionResult Get()
-    {
-        var users = _userService.GetUsers();
-        return Ok(users);
-    }
+    // [HttpGet]
+    // public IActionResult Get()
+    // {
+    //     var users = _userService.GetUsers();
+    //     return Ok(users);
+    // }
 
     // GET api/<UserController>/5
-    [HttpGet("{id}")]
-    public IActionResult Get(string id)
-    {
-        var user = _userService.GetUser(id);
-        return Ok(user);
-    }
+    // [HttpGet("{id}")]
+    // public IActionResult Get(string id)
+    // {
+    //     var user = _userService.GetUser(id);
+    //     return Ok(user);
+    // }
 
     // POST api/<UserController>
     [HttpPost]
