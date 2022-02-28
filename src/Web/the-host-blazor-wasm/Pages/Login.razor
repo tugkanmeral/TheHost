@@ -60,6 +60,11 @@
         if (String.IsNullOrWhiteSpace(MasterKey))
             return;
 
+        if (localStorageManager == null)
+        {
+            localStorageManager = new LocalStorageManager(JsRuntime);
+        }
+
         var loginModel = new LoginModel(Username, Password, MasterKey);
         var result = await Http.PostAsJsonAsync("https://localhost:7244/api/auth/getToken", loginModel);
         if (!result.IsSuccessStatusCode)
