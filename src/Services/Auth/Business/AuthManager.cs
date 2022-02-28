@@ -3,6 +3,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
+using System.Security.Cryptography;
 
 public class AuthManager : IAuthService
 {
@@ -23,7 +24,15 @@ public class AuthManager : IAuthService
         if (user == null)
             return null;
 
-        if (!user.Password.Equals(password))
+        StringBuilder rawPassStrBuilder = new();
+        rawPassStrBuilder.Append(username);
+        rawPassStrBuilder.Append(password);
+        var rawPass = rawPassStrBuilder.ToString();
+
+        using SHA256 sha256Hash = SHA256.Create();
+        var passwordHash = getHash(sha256Hash, rawPass);
+
+        if (!user.Password.Equals(passwordHash))
             return null;
 
         var tokenHandler = new JwtSecurityTokenHandler();
@@ -46,5 +55,25 @@ public class AuthManager : IAuthService
         var tokenStr = tokenHandler.WriteToken(token);
 
         return tokenStr;
+    }
+
+    private static string getHash(HashAlgorithm hashAlgorithm, string input)
+    {
+        // Convert the input string to a byte array and compute the hash.
+        byte[] data = hashAlgorithm.ComputeHash(Encoding.UTF8.GetBytes(input));
+
+        // Create a new Stringbuilder to collect the bytes
+        // and create a string.
+        var sBuilder = new StringBuilder();
+
+        // Loop through each byte of the hashed data
+        // and format each one as a hexadecimal string.
+        for (int i = 0; i < data.Length; i++)
+        {
+            sBuilder.Append(data[i].ToString("x2"));
+        }
+
+        // Return the hexadecimal string.
+        return sBuilder.ToString();
     }
 }
