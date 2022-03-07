@@ -37,10 +37,13 @@
     private string? Username { get; set; }
     private string? Password { get; set; }
     private string? MasterKey { get; set; }
+    private string? tokenGetUrl;
 
     protected override async Task OnInitializedAsync()
     {
         localStorageManager = new LocalStorageManager(JsRuntime);
+
+        getRoutes();
 
         var token = await localStorageManager.GetAsync<string>("token");
         if (!String.IsNullOrWhiteSpace(token))
@@ -66,7 +69,7 @@
         }
 
         var loginModel = new LoginModel(Username, Password, MasterKey);
-        var result = await Http.PostAsJsonAsync("https://localhost:7244/api/auth/getToken", loginModel);
+        var result = await Http.PostAsJsonAsync(tokenGetUrl, loginModel);
         if (!result.IsSuccessStatusCode)
             return;
 
@@ -85,6 +88,21 @@
         // *******************************************************
 
         NavigationManager.NavigateTo("/Password");
+    }
+
+    private void getRoutes()
+    {
+        var passwordServiceRoute = StateContainer.Routes?.Where(x => x.Service == "Auth").SingleOrDefault();
+
+        if (passwordServiceRoute == null)
+            return;
+
+        tokenGetUrl = getRoute(passwordServiceRoute, "getToken");
+    }
+
+    private string getRoute(TheHostRouteModel theHostRoute, string routeName)
+    {
+        return theHostRoute.Url + theHostRoute.EndPoints.Where(x => x.Name == routeName).Single()?.Url;
     }
 
     public class LoginModel
