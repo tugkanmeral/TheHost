@@ -1,6 +1,6 @@
 [{
     "service": "Auth",
-    "url": "http://localhost:5001/",
+    "url": "https://localhost:7244/",
     "endPoints": [
         {
             "name": "getToken",
@@ -10,7 +10,7 @@
 },
 {
     "service": "Password",
-    "url": "http://localhost:5000/",
+    "url": "https://localhost:7109/",
     "endPoints": [
         {
             "name": "passwordInsert",
