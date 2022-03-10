@@ -17,7 +17,7 @@ public class AuthManager : IAuthService
     }
 
     //TODO: password will be stored as combined hash of username and password
-    public string? GetToken(string username, string password)
+    public string? GetToken(string username, string password, string? masterKey = null)
     {
         var user = _userRepository.GetByUsername(username);
 
@@ -40,6 +40,8 @@ public class AuthManager : IAuthService
 
         var claims = new List<Claim>();
         claims.Add(new Claim(ClaimTypes.Name, user.Username));
+        if (masterKey != null)
+            claims.Add(new Claim(CustomClaimTypes.MASTER_KEY, masterKey));
         if (user.Id != null)
             claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
 
