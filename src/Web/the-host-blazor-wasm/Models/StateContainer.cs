@@ -22,5 +22,21 @@
             routes = value;
         }
     }
+
+    private string? masterKey;
+    public string MasterKey
+    {
+        get
+        {
+            if (masterKey == null)
+                throw new NullReferenceException();
+
+            return masterKey;
+        }
+        set
+        {
+            masterKey = value;
+        }
+    }
 }
 

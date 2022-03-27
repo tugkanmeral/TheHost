@@ -68,7 +68,7 @@
             localStorageManager = new LocalStorageManager(JsRuntime);
         }
 
-        var loginModel = new LoginModel(Username, Password, MasterKey);
+        var loginModel = new LoginModel(Username, Password);
         var result = await Http.PostAsJsonAsync(tokenGetUrl, loginModel);
         if (!result.IsSuccessStatusCode)
             return;
@@ -79,6 +79,7 @@
             return;
 
         StateContainer.Token = token;
+        StateContainer.MasterKey = MasterKey;
 
         await localStorageManager.RemoveAsync("token");
         await localStorageManager.SetAsync<string>("token", token);
@@ -107,14 +108,12 @@
 
     public class LoginModel
     {
-        public LoginModel(string username, string password, string masterKey)
+        public LoginModel(string username, string password)
         {
             Username = username;
             Password = password;
-            MasterKey = masterKey;
         }
         public string Username { get; set; } = "";
         public string Password { get; set; } = "";
-        public string MasterKey { get; set; } = "";
     }
 }
