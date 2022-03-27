@@ -10,9 +10,11 @@ namespace Password.Controllers;
 public class PasswordsController : ControllerBase
 {
     IPasswordService _passwordService;
-    public PasswordsController(IPasswordService passwordService)
+    AppSettings _appSettings;
+    public PasswordsController(IPasswordService passwordService, AppSettings appSettings)
     {
         _passwordService = passwordService;
+        _appSettings = appSettings;
     }
 
     // GET: api/<PasswordsController>
@@ -27,7 +29,7 @@ public class PasswordsController : ControllerBase
     [HttpGet("{id}")]
     public IActionResult Get(string id)
     {
-        var password = _passwordService.GetPassword(id, User.GetUserId(), User.GetUserMasterKey());
+        var password = _passwordService.GetPassword(id, User.GetUserId(), _appSettings.PasswordPrivateKey);
         return Ok(password);
     }
 
@@ -35,7 +37,7 @@ public class PasswordsController : ControllerBase
     [HttpPost]
     public IActionResult Post([FromBody] En.Password password)
     {
-        _passwordService.InsertPassword(password, User.GetUserId(), User.GetUserMasterKey());
+        _passwordService.InsertPassword(password, User.GetUserId(), _appSettings.PasswordPrivateKey);
         return Ok();
     }
 
@@ -44,7 +46,7 @@ public class PasswordsController : ControllerBase
     public IActionResult Put(string id, [FromBody] En.Password password)
     {
         password.Id = id;
-        _passwordService.UpdatePassword(password, User.GetUserId(), User.GetUserMasterKey());
+        _passwordService.UpdatePassword(password, User.GetUserId(), _appSettings.PasswordPrivateKey);
         return Ok();
     }
 

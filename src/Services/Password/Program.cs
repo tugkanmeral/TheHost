@@ -20,6 +20,7 @@ builder.Services.AddSingleton(s =>
     appSettings.IV = s.GetRequiredService<IConfiguration>()["IV"];
     appSettings.MongoUri = s.GetRequiredService<IConfiguration>()["MongoUri"];
     appSettings.AuthSecretKey = s.GetRequiredService<IConfiguration>()["AuthSecretKey"];
+    appSettings.PasswordPrivateKey = s.GetRequiredService<IConfiguration>()["PasswordPrivateKey"];
     return appSettings;
 });
 builder.Services.AddScoped<IPasswordRepository, PasswordRepository>();
