@@ -18,9 +18,9 @@ public class PasswordManager : IPasswordService
         _passwordRepository.Delete(userId, id);
     }
 
-    public En.Password GetPassword(string id, string userId, string masterKey)
+    public En.Password GetPassword(string id, string userId, string passwordPrivateKey)
     {
-        if (String.IsNullOrWhiteSpace(masterKey))
+        if (String.IsNullOrWhiteSpace(passwordPrivateKey))
         {
             throw new Exception("Enter master key before all");
         }
@@ -29,7 +29,7 @@ public class PasswordManager : IPasswordService
 
         try
         {
-            password.Pass = Crypto.Decrypt(password.Pass, masterKey, _appSettings.IV);
+            password.Pass = Crypto.Decrypt(password.Pass, passwordPrivateKey, _appSettings.IV);
 
             if (password.Pass.Length > _appSettings.Salt.StartIndex + _appSettings.Salt.Value.Length)
             {
@@ -65,19 +65,14 @@ public class PasswordManager : IPasswordService
         return passwords;
     }
 
-    public void InsertPassword(En.Password password, string userId, string masterKey)
+    public void InsertPassword(En.Password password, string userId, string passwordPrivateKey)
     {
-        if (String.IsNullOrWhiteSpace(masterKey))
-        {
-            throw new Exception("Enter master key before all");
-        }
-
         if (password.Pass.Length > _appSettings.Salt.StartIndex)
         {
             password.Pass = SaltPassword(password.Pass);
         }
 
-        password.Pass = Crypto.Encrypt(password.Pass, masterKey, _appSettings.IV);
+        password.Pass = Crypto.Encrypt(password.Pass, passwordPrivateKey, _appSettings.IV);
         password.CreationDate = DateTime.Now.ToString();
         password.OwnerId = userId;
 
@@ -91,25 +86,20 @@ public class PasswordManager : IPasswordService
         }
     }
 
-    public void UpdatePassword(En.Password password, string userId, string masterKey)
+    public void UpdatePassword(En.Password password, string userId, string passwordPrivateKey)
     {
-        if (String.IsNullOrWhiteSpace(masterKey))
-        {
-            throw new Exception("Enter master key before all");
-        }
-
         var existPassword = _passwordRepository.Get(userId, password.Id);
         if (existPassword == null)
             throw new Exception("Password could not find!");
 
         var currentPass = existPassword.Pass;
-        var saltedPass = Crypto.Decrypt(currentPass, masterKey, _appSettings.IV);
+        var saltedPass = Crypto.Decrypt(currentPass, passwordPrivateKey, _appSettings.IV);
         var pass = DesaltPassword(saltedPass);
 
         if (!String.IsNullOrWhiteSpace(password.Pass) & password.Pass != pass) // password changed
         {
             var saltedNewPass = SaltPassword(password.Pass);
-            existPassword.Pass = Crypto.Encrypt(saltedNewPass, masterKey, _appSettings.IV);
+            existPassword.Pass = Crypto.Encrypt(saltedNewPass, passwordPrivateKey, _appSettings.IV);
         }
 
         if (!String.IsNullOrWhiteSpace(password.Detail) & password.Detail != existPassword.Detail) // detail changed

@@ -15,7 +15,7 @@ public class AuthController : ControllerBase
     [HttpPost("getToken")]
     public string? GetToken(AuthRequest request)
     {
-        var token = _authService.GetToken(request.Username, request.Password, request.MasterKey);
+        var token = _authService.GetToken(request.Username, request.Password);
         return token;
     }
 }

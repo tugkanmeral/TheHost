@@ -20,13 +20,6 @@ public static class Utils
         return strBuilder.ToString();
     }
 
-    public static string GetUserMasterKey(this ClaimsPrincipal user)
-    {
-        var masterKey = string.Empty;
-        masterKey = user.Claims.FirstOrDefault(c => c.Type == CustomClaimTypes.MASTER_KEY)?.Value;
-        return masterKey ?? string.Empty;
-    }
-
     public static string GetUserId(this ClaimsPrincipal user)
     {
         return user.Claims.Where(x => x.Type == ClaimTypes.NameIdentifier).Single().Value ?? String.Empty;
