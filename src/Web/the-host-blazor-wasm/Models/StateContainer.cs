@@ -38,5 +38,8 @@
             masterKey = value;
         }
     }
+
+    private int[] iv = new int[] { 32, 2, 18, 119, 65, 3, 44, 72, 13, 65, 82, 65 };
+    public int[] IV => iv;
 }
 
