@@ -6,4 +6,5 @@ public interface IPasswordRepository
     void Insert(En.Password password);
     void Update(En.Password password);
     void Delete(string userId, string id);
+    Task<long> GetUserPasswordCount(string userId);
 }

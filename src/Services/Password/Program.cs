@@ -25,6 +25,7 @@ builder.Services.AddSingleton(s =>
 });
 builder.Services.AddScoped<IPasswordRepository, PasswordRepository>();
 builder.Services.AddScoped<IPasswordService, PasswordManager>();
+builder.Services.AddScoped<IDashboardService, DashboardManager>();
 builder.Services.AddSingleton<IMongoClient, MongoClient>(s =>
 {
     var uri = s.GetRequiredService<IConfiguration>()["MongoUri"];

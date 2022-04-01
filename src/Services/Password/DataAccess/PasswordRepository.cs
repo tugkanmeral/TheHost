@@ -52,4 +52,11 @@ public class PasswordRepository : IPasswordRepository, IMongoDbRepository<En.Pas
         var filter = Builders<En.Password>.Filter.Eq(p => p.Id, password.Id);
         Collection.ReplaceOne(filter, password);
     }
+
+    public async Task<long> GetUserPasswordCount(string userId)
+    {
+        var filter = Builders<En.Password>.Filter.Eq(p => p.OwnerId, userId);
+        var count = await Collection.CountDocumentsAsync(filter);
+        return count;
+    }
 }
