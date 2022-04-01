@@ -102,7 +102,7 @@ public class PasswordManager : IPasswordService
             existPassword.Pass = Crypto.Encrypt(saltedNewPass, passwordPrivateKey, _appSettings.IV);
         }
 
-        if (!String.IsNullOrWhiteSpace(password.Detail) & password.Detail != existPassword.Detail) // detail changed
+        if (password.Detail != existPassword.Detail) // detail changed
         {
             existPassword.Detail = password.Detail;
         }
