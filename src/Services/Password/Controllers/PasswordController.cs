@@ -19,7 +19,7 @@ public class PasswordsController : ControllerBase
 
     // GET: api/<PasswordsController>
     [HttpGet]
-    public IActionResult Get(int? skip, int? take)
+    public IActionResult Get(int skip = 0, int take = 10)
     {
         var passwords = _passwordService.GetPasswords(User.GetUserId(), skip, take);
         return Ok(passwords);

@@ -50,7 +50,7 @@ public class PasswordManager : IPasswordService
         return password;
     }
 
-    public List<En.Password> GetPasswords(string userId, int? skip, int? take)
+    public List<En.Password> GetPasswords(string userId, int skip, int take)
     {
         List<En.Password> passwords = new();
         try

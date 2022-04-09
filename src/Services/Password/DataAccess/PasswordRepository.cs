@@ -27,7 +27,7 @@ public class PasswordRepository : IPasswordRepository, IMongoDbRepository<En.Pas
         return password;
     }
 
-    public List<En.Password> Get(string userId, int? skip = 0, int? take = 10)
+    public List<En.Password> Get(string userId, int skip, int take)
     {
         var filter = Builders<En.Password>.Filter.Eq(p => p.OwnerId, userId);
         var projection = Builders<En.Password>.Projection
