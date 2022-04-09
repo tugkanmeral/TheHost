@@ -19,9 +19,9 @@ public class PasswordsController : ControllerBase
 
     // GET: api/<PasswordsController>
     [HttpGet]
-    public IActionResult Get()
+    public IActionResult Get(int? skip, int? take)
     {
-        var passwords = _passwordService.GetPasswords(User.GetUserId());
+        var passwords = _passwordService.GetPasswords(User.GetUserId(), skip, take);
         return Ok(passwords);
     }
 

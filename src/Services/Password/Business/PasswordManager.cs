@@ -50,12 +50,12 @@ public class PasswordManager : IPasswordService
         return password;
     }
 
-    public List<En.Password> GetPasswords(string userId)
+    public List<En.Password> GetPasswords(string userId, int? skip, int? take)
     {
         List<En.Password> passwords = new();
         try
         {
-            passwords = _passwordRepository.Get(userId);
+            passwords = _passwordRepository.Get(userId, skip, take);
         }
         catch (Exception)
         {
