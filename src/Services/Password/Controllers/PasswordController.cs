@@ -19,10 +19,17 @@ public class PasswordsController : ControllerBase
 
     // GET: api/<PasswordsController>
     [HttpGet]
-    public IActionResult Get(int skip = 0, int take = 10)
+    public async Task<ItemsResponse> Get(int skip = 0, int take = 10)
     {
         var passwords = _passwordService.GetPasswords(User.GetUserId(), skip, take);
-        return Ok(passwords);
+        var totalPasswordsCount = await _passwordService.GetTotalPasswordsCount(User.GetUserId());
+
+        ItemsResponse response = new();
+        response.Items = passwords;
+        response.TotalItemCount = totalPasswordsCount;
+        response.Skip = skip;
+        response.Take = take;
+        return response;
     }
 
     // GET api/<PasswordsController>/5

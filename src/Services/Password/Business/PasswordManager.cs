@@ -140,4 +140,9 @@ public class PasswordManager : IPasswordService
         strBuilder.Append(last);
         return strBuilder.ToString();
     }
+
+    public async Task<long> GetTotalPasswordsCount(string userId)
+    {
+        return await _passwordRepository.GetUserPasswordsCount(userId);
+    }
 }

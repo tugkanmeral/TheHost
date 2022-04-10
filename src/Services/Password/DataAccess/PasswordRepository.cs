@@ -53,7 +53,7 @@ public class PasswordRepository : IPasswordRepository, IMongoDbRepository<En.Pas
         Collection.ReplaceOne(filter, password);
     }
 
-    public async Task<long> GetUserPasswordCount(string userId)
+    public async Task<long> GetUserPasswordsCount(string userId)
     {
         var filter = Builders<En.Password>.Filter.Eq(p => p.OwnerId, userId);
         var count = await Collection.CountDocumentsAsync(filter);

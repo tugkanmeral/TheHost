@@ -7,6 +7,6 @@ public class DashboardManager : IDashboardService
     }
     public async Task<long> TotalPasswordCount(string userId)
     {
-        return await _passwordRepository.GetUserPasswordCount(userId);
+        return await _passwordRepository.GetUserPasswordsCount(userId);
     }
 }

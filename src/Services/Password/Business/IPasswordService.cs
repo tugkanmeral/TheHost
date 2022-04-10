@@ -8,4 +8,5 @@ public interface IPasswordService
     void DeletePassword(string id, string userId);
     string SaltPassword(string rawPassword);
     string DesaltPassword(string saltedPassword);
+    Task<long> GetTotalPasswordsCount(string userId);
 }
