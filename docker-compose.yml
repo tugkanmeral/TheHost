@@ -8,6 +8,7 @@ services:
       - 5002:8080
     networks:
       - the-host-br-network
+    container_name: the-host-password-container
   auth:
     build: 
       context: ./src/Services/Auth
@@ -16,6 +17,7 @@ services:
       - 5001:8080
     networks:
       - the-host-br-network
+    container_name: the-host-auth-container
 networks:
   the-host-br-network:
     driver: bridge
