@@ -18,6 +18,13 @@ services:
     networks:
       - the-host-br-network
     container_name: the-host-auth-container
+  mongo:
+    image: "mongo"
+    ports: 
+      - 27017:27017
+    networks:
+      - the-host-br-network
+    container_name: the-host-mongo-container
 networks:
   the-host-br-network:
     driver: bridge
