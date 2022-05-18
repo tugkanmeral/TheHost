@@ -1,5 +1,14 @@
 version: '3'
 services:
+  web:
+    build: 
+      context: ./src/Web/the-host-blazor-wasm
+      dockerfile: Dockerfile
+    ports: 
+      - 8080:80
+    networks:
+      - the-host-br-network
+    container_name: the-host-blazor-wasm-container
   password:
     build: 
       context: ./src/Services/Password
