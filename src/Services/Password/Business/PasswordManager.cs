@@ -50,16 +50,16 @@ public class PasswordManager : IPasswordService
         return password;
     }
 
-    public List<En.Password> GetPasswords(string userId, int skip, int take)
+    public List<En.Password> GetPasswords(string userId, int skip, int take, string? searchText)
     {
         List<En.Password> passwords = new();
         try
         {
-            passwords = _passwordRepository.Get(userId, skip, take);
+            passwords = _passwordRepository.Get(userId, skip, take, searchText);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            throw new Exception("Error while passwords getting");
+            throw new Exception("Error while passwords getting", ex);
         }
 
         return passwords;

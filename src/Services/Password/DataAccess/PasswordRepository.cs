@@ -1,3 +1,4 @@
+using MongoDB.Bson;
 using MongoDB.Driver;
 using En = Password.Entities;
 
@@ -27,9 +28,10 @@ public class PasswordRepository : IPasswordRepository, IMongoDbRepository<En.Pas
         return password;
     }
 
-    public List<En.Password> Get(string userId, int skip, int take)
+    public List<En.Password> Get(string userId, int skip, int take, string? searchText)
     {
-        var filter = Builders<En.Password>.Filter.Eq(p => p.OwnerId, userId);
+        var findFilter = buildPasswordFilter(userId, searchText);
+
         var projection = Builders<En.Password>.Projection
         .Include(x => x.Title)
         .Include(x => x.Username)
@@ -37,7 +39,7 @@ public class PasswordRepository : IPasswordRepository, IMongoDbRepository<En.Pas
         .Include(x => x.LastUpdateDate)
         .Include(x => x.CreationDate)
         .Include(x => x.OwnerId);
-        var passwords = Collection.Find(filter).Project<En.Password>(projection).Skip(skip).Limit(take).ToList();
+        var passwords = Collection.Find(findFilter).Project<En.Password>(projection).Skip(skip).Limit(take).ToList();
 
         return passwords;
     }
@@ -58,5 +60,19 @@ public class PasswordRepository : IPasswordRepository, IMongoDbRepository<En.Pas
         var filter = Builders<En.Password>.Filter.Eq(p => p.OwnerId, userId);
         var count = await Collection.CountDocumentsAsync(filter);
         return count;
+    }
+
+    private FilterDefinition<En.Password> buildPasswordFilter(string userId, string? searchText)
+    {
+        var filterDefinitions = new List<FilterDefinition<En.Password>>();
+
+        filterDefinitions.Add(Builders<En.Password>.Filter.Eq(x => x.OwnerId, userId));
+
+        if (!String.IsNullOrWhiteSpace(searchText))
+        {
+            filterDefinitions.Add(Builders<En.Password>.Filter.Text(searchText));
+        }
+
+        return Builders<En.Password>.Filter.And(filterDefinitions);
     }
 }

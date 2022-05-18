@@ -19,9 +19,9 @@ public class PasswordsController : ControllerBase
 
     // GET: api/<PasswordsController>
     [HttpGet]
-    public async Task<ItemsResponse> Get(int skip = 0, int take = 10)
+    public async Task<ItemsResponse> Get(int skip = 0, int take = 10, string? searchText = null)
     {
-        var passwords = _passwordService.GetPasswords(User.GetUserId(), skip, take);
+        var passwords = _passwordService.GetPasswords(User.GetUserId(), skip, take, searchText);
         var totalPasswordsCount = await _passwordService.GetTotalPasswordsCount(User.GetUserId());
 
         ItemsResponse response = new();
