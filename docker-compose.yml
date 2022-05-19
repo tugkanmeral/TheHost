@@ -18,6 +18,15 @@ services:
     networks:
       - the-host-br-network
     container_name: the-host-password-container
+  note:
+    build: 
+      context: ./src/Services/Note
+      dockerfile: Dockerfile
+    ports: 
+      - 5003:8080
+    networks:
+      - the-host-br-network
+    container_name: the-host-note-container
   auth:
     build: 
       context: ./src/Services/Auth
