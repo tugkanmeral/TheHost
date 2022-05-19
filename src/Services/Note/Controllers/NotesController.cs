@@ -7,7 +7,7 @@ namespace Note.Controllers;
 [Authorize]
 [ApiController]
 [Route("api/[controller]")]
-public class NoteController : ControllerBase
+public class NotesController : ControllerBase
 {
     INoteService _noteService;
     AppSettings _appSettings;
