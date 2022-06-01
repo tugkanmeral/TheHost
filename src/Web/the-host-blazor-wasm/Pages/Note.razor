@@ -8,3 +8,95 @@
 <PageTitle>Note</PageTitle>
 
 <h1>Notes</h1>
+
+<div class="input-group mb-3">
+    <div class="input-group-prepend">
+        <span class="input-group-text" id="note-title">Title</span>
+    </div>
+    <input type="text" class="form-control" placeholder="Title" aria-label="Title" aria-describedby="note-title"
+        @bind="NoteItem.Title" />
+</div>
+<div class="input-group mb-3">
+    <div class="input-group-prepend">
+        <span class="input-group-text" id="note-text">Text</span>
+    </div>
+    <input type="text" class="form-control" placeholder="Text" aria-label="Text" aria-describedby="note-text"
+        @bind="NoteItem.Text" />
+</div>
+
+<button class="btn btn-primary" @onclick="upsert">Save</button>
+@* <button class="btn btn-warning" @onclick="copy" disabled="@isCopyBtnDisabled">Copy</button>
+    <button class="btn btn-danger" @onclick="@(e => delete(password.Id))" disabled="@isDeleteBtnDisabled">Delete</button>
+    <button class="btn btn-default" @onclick="cancel">Cancel</button> *@
+
+@code {
+    private Models.Note note = new Models.Note();
+    public Models.Note NoteItem
+    {
+        get
+        {
+            return note;
+        }
+        set
+        {
+            note = value;
+        }
+    }
+    string? noteGetUrl = null;
+    string? notesGetUrl = null;
+    string? noteInsertUrl = null;
+    string? noteUpdateUrl = null;
+    string? noteDeleteUrl = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        getRoutes();
+
+        if (!String.IsNullOrWhiteSpace(StateContainer.Token))
+        {
+            //await getPasswords();
+        }
+    }
+
+    public async Task upsert()
+    {
+        if (NoteItem?.Title == null || NoteItem.Text == null)
+            return;
+
+        var model = new Models.NoteUpsertModel()
+        {
+            Id = NoteItem?.Id,
+            Title = NoteItem?.Title,
+            Text = NoteItem?.Text
+        };
+
+        HttpResponseMessage response;
+        if (String.IsNullOrWhiteSpace(model.Id))
+            response = await Http.PostAsJsonAsync(noteInsertUrl, model);
+        else
+            response = await Http.PutAsJsonAsync(noteUpdateUrl + model.Id, model);
+
+        cancel();
+    }
+
+    public void cancel() => NoteItem = new Models.Note();
+
+    private void getRoutes()
+    {
+        var noteServiceRoute = StateContainer.Routes?.Where(x => x.Service == "Note").SingleOrDefault();
+
+        if (noteServiceRoute == null)
+            return;
+
+        noteGetUrl = getRoute(noteServiceRoute, "note");
+        notesGetUrl = getRoute(noteServiceRoute, "notes");
+        noteInsertUrl = getRoute(noteServiceRoute, "noteInsert");
+        noteUpdateUrl = getRoute(noteServiceRoute, "noteUpdate");
+        noteDeleteUrl = getRoute(noteServiceRoute, "noteDelete");
+    }
+
+    private string getRoute(TheHostRouteModel theHostRoute, string routeName)
+    {
+        return theHostRoute.Url + theHostRoute.EndPoints.Where(x => x.Name == routeName).Single()?.Url;
+    }
+}

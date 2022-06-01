@@ -33,4 +33,30 @@
             "url": "api/passwords/"
         }
     ]
+},
+{
+    "service": "Note",
+    "url": "http://localhost:5003/",
+    "endPoints": [
+        {
+            "name": "noteInsert",
+            "url": "api/notes"
+        },
+        {
+            "name": "noteUpdate",
+            "url": "api/notes/"
+        },
+        {
+            "name": "notes",
+            "url": "api/notes"
+        },
+        {
+            "name": "note",
+            "url": "api/notes/"
+        },
+        {
+            "name": "noteDelete",
+            "url": "api/notes/"
+        }
+    ]
 }]
