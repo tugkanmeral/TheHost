@@ -1,0 +1,105 @@
+@using System.Text.Json
+@inject HttpClient Http
+@inject IJSRuntime JsRuntime
+
+<h1>@Title</h1>
+
+@if (!_isLoaded)
+{
+    <p><em>@Title items loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                @for (int i = 0; i < _config.ColumnNames.Length; i++)
+                {
+                    <th>@_config.ColumnNames[i]</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @for (int j = 0; j < _dataSet.GetLength(0); j++)
+            {
+                <tr>
+                    @for (int i = 0; i < _config.ColumnNames.Length; i++)
+                    {
+                        <td>@_dataSet[j,i].ToString()</td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+<br />
+
+@code {
+    class AnyListConf
+    {
+        public string? GetItemsUrl { get; set; }
+        public string[] ColumnNames { get; set; } = Array.Empty<string>();
+        public int Skip { get; set; } = 0;
+        public int Take { get; set; } = 10;
+
+    }
+    public class ItemsResponseModel
+    {
+        public object[]? Items { get; set; }
+        public long TotalItemCount { get; set; }
+        public int Skip { get; set; } = 0;
+        public int Take { get; set; } = 10;
+    }
+
+    [Parameter]
+    public string? Title { get; set; }
+
+    [Parameter]
+    public string? Config { get; set; }
+
+    private AnyListConf _config { get; set; } = new();
+    private int? _currentPage { get; set; }
+    private long? _totalItemCount { get; set; }
+    private long? _totalPageCount { get; set; }
+    private string[,] _dataSet { get; set; } = new string[0, 0];
+    private bool _isLoaded = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _config = JsonSerializer.Deserialize<AnyListConf>(Config ?? String.Empty) ?? new();
+
+        if (_config != null)
+        {
+            await getListItems();
+        }
+    }
+
+    private async Task getListItems()
+    {
+        var getListItemsUrl = _config.GetItemsUrl + "?skip=" + _config.Skip + "&take=" + _config.Take;
+        var responseModel = await Http.GetFromJsonAsync<ItemsResponseModel>(getListItemsUrl);
+
+        _currentPage = (responseModel?.Skip / responseModel?.Take) + 1;
+        _totalItemCount = responseModel?.TotalItemCount ?? 0;
+        _totalPageCount = _totalItemCount / responseModel?.Take;
+
+        var items = JsonDocument.Parse(JsonSerializer.Serialize(responseModel?.Items)).RootElement.EnumerateArray();
+        var itemsCount = items.Count();
+        var colNamesCount = _config.ColumnNames.Count();
+        string[,] dataSet = new string[itemsCount, _config?.ColumnNames.Count() ?? 0];
+
+        int count = 0;
+        foreach (var item in items)
+        {
+            for (int j = 0; j < colNamesCount; j++)
+            {
+                var value = item.GetProperty(_config.ColumnNames[j]).ToString();
+                dataSet[count, j] = value;
+            }
+            count++;
+        }
+
+        _dataSet = dataSet;
+        _isLoaded = true;
+    }
+}

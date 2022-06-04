@@ -1,5 +1,7 @@
 @page "/note"
 @using Models
+@using the_host_blazor_wasm.Components 
+@using System.Text.Json
 @inject HttpClient Http
 @inject IJSRuntime JsRuntime
 @inject StateContainer StateContainer
@@ -7,7 +9,9 @@
 
 <PageTitle>Note</PageTitle>
 
-<h1>Notes</h1>
+@if (noteListConfStr != null) {
+    <AnyList Title="Notes" Config="@noteListConfStr"></AnyList>
+}
 
 <div class="input-group mb-3">
     <div class="input-group-prepend">
@@ -47,6 +51,8 @@
     string? noteInsertUrl = null;
     string? noteUpdateUrl = null;
     string? noteDeleteUrl = null;
+    string? noteListConfStr = null;
+    public NoteListConfig noteListConf = new(); 
 
     protected override async Task OnInitializedAsync()
     {
@@ -54,8 +60,12 @@
 
         if (!String.IsNullOrWhiteSpace(StateContainer.Token))
         {
-            //await getPasswords();
+            //await getNotes();
         }
+
+        noteListConf.GetItemsUrl = notesGetUrl;
+        noteListConf.ColumnNames = new String[] {"id", "title"};
+        noteListConfStr = JsonSerializer.Serialize(noteListConf);
     }
 
     public async Task upsert()
