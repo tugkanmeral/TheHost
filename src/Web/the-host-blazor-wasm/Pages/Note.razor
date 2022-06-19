@@ -1,6 +1,6 @@
 @page "/note"
 @using Models
-@using the_host_blazor_wasm.Components 
+@using the_host_blazor_wasm.Components
 @using System.Text.Json
 @inject HttpClient Http
 @inject IJSRuntime JsRuntime
@@ -9,7 +9,8 @@
 
 <PageTitle>Note</PageTitle>
 
-@if (noteListConfStr != null) {
+@if (noteListConfStr != null)
+{
     <AnyList Title="Notes" Config="@noteListConfStr"></AnyList>
 }
 
@@ -24,8 +25,8 @@
     <div class="input-group-prepend">
         <span class="input-group-text" id="note-text">Text</span>
     </div>
-    <input type="text" class="form-control" placeholder="Text" aria-label="Text" aria-describedby="note-text"
-        @bind="NoteItem.Text" />
+    <textarea type="text" class="form-control" placeholder="Text" aria-label="Text" aria-describedby="note-text"
+        @bind="NoteItem.Text"></textarea>
 </div>
 
 <button class="btn btn-primary" @onclick="upsert">Save</button>
@@ -52,7 +53,7 @@
     string? noteUpdateUrl = null;
     string? noteDeleteUrl = null;
     string? noteListConfStr = null;
-    public NoteListConfig noteListConf = new(); 
+    public NoteListConfig noteListConf = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -64,7 +65,7 @@
         }
 
         noteListConf.GetItemsUrl = notesGetUrl;
-        noteListConf.ColumnNames = new String[] {"id", "title"};
+        noteListConf.ColumnNames = new String[] { "id", "title" };
         noteListConfStr = JsonSerializer.Serialize(noteListConf);
     }
 
