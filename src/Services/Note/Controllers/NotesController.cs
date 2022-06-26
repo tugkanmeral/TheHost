@@ -66,4 +66,11 @@ public class NotesController : ControllerBase
         _noteService.DeleteNote(id, User.GetUserId());
         return Ok();
     }
+
+    [HttpPost("searchNote")]
+    public async Task<IEnumerable<En.Note>> SearchNote(SearchNoteRequest request)
+    {
+        var notes = await _noteService.SearchNote(User.GetUserId(), request.Skip, request.Take, request.SearchText, request.Tags);
+        return notes;
+    }
 }

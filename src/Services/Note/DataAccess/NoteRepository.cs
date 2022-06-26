@@ -50,6 +50,18 @@ public class NoteRepository : INoteRepository, IMongoDbRepository<En.Note>
         return notes;
     }
 
+    public async Task<List<En.Note>> SearchNote(string userId, int skip, int take, string? searchText, string[]? tags)
+    {
+        var fullTextSearchFilter = Builders<En.Note>.Filter.Text(searchText);
+        var facetedSearchFilter = Builders<En.Note>.Filter.All("Tags", tags);
+
+        var filters = fullTextSearchFilter & facetedSearchFilter;
+
+        var notes = await Collection.Find(filters).Skip(skip).Limit(take).ToListAsync();
+
+        return notes;
+    }
+
     public async Task<long> GetTotalNotesCount(string userId)
     {
         var filter = Builders<En.Note>.Filter.Eq(p => p.OwnerId, userId);

@@ -6,5 +6,6 @@ public interface INoteRepository : IMongoDbRepository<En.Note>
     void Update(En.Note note);
     void Delete(string userId, string id);
     List<En.Note> Get(string userId, int skip, int take, string? searchText);
+    Task<List<En.Note>> SearchNote(string userId, int skip, int take, string? searchText, string[]? tags);
     Task<long> GetTotalNotesCount(string userId);
 }
