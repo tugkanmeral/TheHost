@@ -52,10 +52,16 @@ public class NoteRepository : INoteRepository, IMongoDbRepository<En.Note>
 
     public async Task<List<En.Note>> SearchNote(string userId, int skip, int take, string? searchText, string[]? tags)
     {
-        var fullTextSearchFilter = Builders<En.Note>.Filter.Text(searchText);
-        var facetedSearchFilter = Builders<En.Note>.Filter.All("Tags", tags);
+        FilterDefinition<En.Note>? filters = Builders<En.Note>.Filter.Empty;
 
-        var filters = fullTextSearchFilter & facetedSearchFilter;
+        if (!String.IsNullOrWhiteSpace(searchText))
+            filters &= Builders<En.Note>.Filter.Text(searchText);
+
+        if (tags != null && tags.Length > 0)
+            filters &= Builders<En.Note>.Filter.All("Tags", tags);
+
+        if (filters == null)
+            throw new Exception("Filter cannot be null.");
 
         var notes = await Collection.Find(filters).Skip(skip).Limit(take).ToListAsync();
 

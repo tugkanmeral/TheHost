@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using En = Note.Entities;
-using Note;
 
 namespace Note.Controllers;
 
@@ -68,9 +67,12 @@ public class NotesController : ControllerBase
     }
 
     [HttpPost("searchNote")]
-    public async Task<IEnumerable<En.Note>> SearchNote(SearchNoteRequest request)
+    public async Task<IActionResult> SearchNote(SearchNoteRequest request)
     {
+        if (String.IsNullOrWhiteSpace(request.SearchText) && request.Tags == null)
+            return BadRequest("SearchText and Tags cannot be null. At least, one of them should have a value!");
+
         var notes = await _noteService.SearchNote(User.GetUserId(), request.Skip, request.Take, request.SearchText, request.Tags);
-        return notes;
+        return Ok(notes);
     }
 }
