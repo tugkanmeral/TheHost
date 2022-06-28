@@ -9,9 +9,62 @@
 
 <PageTitle>Note</PageTitle>
 
-@if (noteListConfStr != null)
+<h1>Notes</h1>
+
+@if (notes == null)
 {
-    <AnyList Title="Notes" Config="@noteListConfStr"></AnyList>
+    <p><em>Notes loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th />
+                <th>Title</th>
+                <th>Text</th>
+                <th>Creation Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var note in notes)
+            {
+                <tr>
+                    <td>
+                        <button class="btn" @onclick="@(e => getNote(note.Id))">
+                            <span class="oi oi-pencil" aria-hidden="true" />
+                        </button>
+                    </td>
+                    <td>@note.Title</td>
+                    <td>@note.Text</td>
+                    <td>@note.CreationDate</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <nav>
+        <ul class="pagination">
+            @if (!isPreviousPageBtnDisabled)
+            {
+                <li class="page-item" @onclick="previousPage"><a class="page-link" style="cursor: pointer;">Previous</a></li>
+            }
+            else
+            {
+                <li class="page-item"><a class="page-link" style="color: grey;">Previous</a></li>
+            }
+
+            <li class="page-item disabled"><a class="page-link">@currentPage</a></li>
+
+            @if (!isNextPageBtnDisabled)
+            {
+                <li class="page-item" @onclick="nextPage"><a class="page-link" style="cursor: pointer;">Next</a></li>
+            }
+            else
+            {
+                <li class="page-item"><a class="page-link" style="color: grey;">Next</a></li>
+            }
+        </ul>
+    </nav>
 }
 
 <div class="input-group mb-3">
@@ -30,12 +83,27 @@
 </div>
 
 <button class="btn btn-primary" @onclick="upsert">Save</button>
-@* <button class="btn btn-warning" @onclick="copy" disabled="@isCopyBtnDisabled">Copy</button>
-    <button class="btn btn-danger" @onclick="@(e => delete(password.Id))" disabled="@isDeleteBtnDisabled">Delete</button>
-    <button class="btn btn-default" @onclick="cancel">Cancel</button> *@
+<button class="btn btn-danger" @onclick="@(e => delete(note.Id))" disabled="@isDeleteBtnDisabled">Delete</button>
+<button class="btn btn-default" @onclick="cancel">Cancel</button>
 
 @code {
+    private Models.Note[]? notes;
     private Models.Note note = new Models.Note();
+
+    string? noteGetUrl = null;
+    string? notesGetUrl = null;
+    string? noteInsertUrl = null;
+    string? noteUpdateUrl = null;
+    string? noteDeleteUrl = null;
+    private bool isDeleteBtnDisabled = false;
+    private bool isPreviousPageBtnDisabled = true;
+    private bool isNextPageBtnDisabled = true;
+    private int skip = 0;
+    private int take = 5;
+    private int currentPage = 0;
+    private long totalPasswordCount = 0;
+    private long totalPageCount = 0;
+
     public Models.Note NoteItem
     {
         get
@@ -45,28 +113,50 @@
         set
         {
             note = value;
+            setButtonsDisability();
         }
     }
-    string? noteGetUrl = null;
-    string? notesGetUrl = null;
-    string? noteInsertUrl = null;
-    string? noteUpdateUrl = null;
-    string? noteDeleteUrl = null;
-    string? noteListConfStr = null;
-    public NoteListConfig noteListConf = new();
 
     protected override async Task OnInitializedAsync()
     {
         getRoutes();
 
         if (!String.IsNullOrWhiteSpace(StateContainer.Token))
-        {
-            //await getNotes();
-        }
+            await getNotes();
 
-        noteListConf.GetItemsUrl = notesGetUrl;
-        noteListConf.ColumnNames = new String[] { "id", "title" };
-        noteListConfStr = JsonSerializer.Serialize(noteListConf);
+        setButtonsDisability();
+    }
+
+    private async Task getNotes()
+    {
+        var notesGetUrlWParameter = notesGetUrl + "?skip=" + skip + "&take=" + take;
+        var notesModel = await Http.GetFromJsonAsync<Models.NotesResponseModel>(notesGetUrlWParameter);
+        notes = notesModel?.Items;
+        currentPage = (skip / take) + 1;
+        totalPasswordCount = notesModel?.TotalItemCount ?? 0;
+        totalPageCount = totalPasswordCount / take;
+
+        setPaginationBtnsDisability();
+    }
+
+    private async void getNote(string id)
+    {
+        var response = await Http.GetFromJsonAsync<Models.Note>(noteGetUrl + id);
+        if (response != null)
+            NoteItem = response;
+    }
+
+    private void setPaginationBtnsDisability()
+    {
+        if (currentPage <= 1)
+            isPreviousPageBtnDisabled = true;
+        else
+            isPreviousPageBtnDisabled = false;
+
+        if (currentPage > totalPageCount)
+            isNextPageBtnDisabled = true;
+        else
+            isNextPageBtnDisabled = false;
     }
 
     public async Task upsert()
@@ -86,6 +176,22 @@
             response = await Http.PostAsJsonAsync(noteInsertUrl, model);
         else
             response = await Http.PutAsJsonAsync(noteUpdateUrl + model.Id, model);
+
+        if (response.IsSuccessStatusCode)
+            await getNotes();
+
+        cancel();
+    }
+
+    private async Task delete(string? id)
+    {
+        if (String.IsNullOrWhiteSpace(id))
+            return;
+
+        var response = await Http.DeleteAsync(noteDeleteUrl + id);
+
+        if (response.IsSuccessStatusCode)
+            await getNotes();
 
         cancel();
     }
@@ -109,5 +215,31 @@
     private string getRoute(TheHostRouteModel theHostRoute, string routeName)
     {
         return theHostRoute.Url + theHostRoute.EndPoints.Where(x => x.Name == routeName).Single()?.Url;
+    }
+
+    private async Task previousPage()
+    {
+        if (skip - take < 0)
+            return;
+
+        skip -= take;
+        await getNotes();
+    }
+
+    private async Task nextPage()
+    {
+        if (currentPage > totalPageCount)
+            return;
+
+        skip += take;
+        await getNotes();
+    }
+
+    private void setButtonsDisability()
+    {
+        if (String.IsNullOrWhiteSpace(NoteItem.Id))
+            isDeleteBtnDisabled = true;
+        else
+            isDeleteBtnDisabled = false;
     }
 }
