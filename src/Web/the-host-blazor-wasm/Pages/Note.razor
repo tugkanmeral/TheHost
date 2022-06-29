@@ -7,6 +7,7 @@
 @inject StateContainer StateContainer
 @inject NavigationManager NavigationManager
 
+
 <PageTitle>Note</PageTitle>
 
 <h1>Notes</h1>
@@ -17,6 +18,16 @@
 }
 else
 {
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="search-text">Search text</span>
+        </div>
+        <input type="text" class="form-control" placeholder="Search text" aria-label="Search text"
+        aria-describedby="search-text" @bind="searchText" />
+        <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="button" @onclick="@(async e => await search())">Search</button>
+        </div>
+    </div>
     <table class="table">
         <thead>
             <tr>
@@ -95,6 +106,7 @@ else
     string? noteInsertUrl = null;
     string? noteUpdateUrl = null;
     string? noteDeleteUrl = null;
+    string? noteSearchUrl = null;
     private bool isDeleteBtnDisabled = false;
     private bool isPreviousPageBtnDisabled = true;
     private bool isNextPageBtnDisabled = true;
@@ -103,6 +115,8 @@ else
     private int currentPage = 0;
     private long totalPasswordCount = 0;
     private long totalPageCount = 0;
+
+    private string searchText = String.Empty;
 
     public Models.Note NoteItem
     {
@@ -144,6 +158,25 @@ else
         var response = await Http.GetFromJsonAsync<Models.Note>(noteGetUrl + id);
         if (response != null)
             NoteItem = response;
+    }
+
+    public async Task search()
+    {
+        var request = new NoteSearchRequest()
+        {
+            SearchText = searchText
+        };
+
+        var response = await Http.PostAsJsonAsync(noteSearchUrl, request);
+
+        if (!response.IsSuccessStatusCode)
+            return;
+
+        var notesJson = await response.Content.ReadAsStringAsync();
+        notes = JsonSerializer.Deserialize<Models.Note[]>(notesJson, new JsonSerializerOptions()
+        {
+            PropertyNameCaseInsensitive = true
+        });
     }
 
     private void setPaginationBtnsDisability()
@@ -210,6 +243,7 @@ else
         noteInsertUrl = getRoute(noteServiceRoute, "noteInsert");
         noteUpdateUrl = getRoute(noteServiceRoute, "noteUpdate");
         noteDeleteUrl = getRoute(noteServiceRoute, "noteDelete");
+        noteSearchUrl = getRoute(noteServiceRoute, "noteSearch");
     }
 
     private string getRoute(TheHostRouteModel theHostRoute, string routeName)
