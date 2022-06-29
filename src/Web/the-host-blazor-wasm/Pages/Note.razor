@@ -31,7 +31,7 @@ else
             {
                 <tr>
                     <td>
-                        <button class="btn" @onclick="@(e => getNote(note.Id))">
+                        <button class="btn" @onclick="@(async e => await getNote(note.Id))">
                             <span class="oi oi-pencil" aria-hidden="true" />
                         </button>
                     </td>
@@ -139,7 +139,7 @@ else
         setPaginationBtnsDisability();
     }
 
-    private async void getNote(string id)
+    private async Task getNote(string id)
     {
         var response = await Http.GetFromJsonAsync<Models.Note>(noteGetUrl + id);
         if (response != null)
