@@ -23,7 +23,7 @@ else
             <span class="input-group-text" id="search-text">Search text</span>
         </div>
         <input type="text" class="form-control" placeholder="Search text" aria-label="Search text"
-        aria-describedby="search-text" @bind="searchText" />
+        aria-describedby="search-text" @bind="searchText" @bind:event="oninput" @onkeydown="@(async (e) => await searchTextInputKeyDownEvent(e))"/>
         <div class="input-group-append">
             <button class="btn btn-outline-secondary" type="button" @onclick="@(async e => await search())">Search</button>
         </div>
@@ -162,6 +162,11 @@ else
 
     public async Task search()
     {
+        if (String.IsNullOrWhiteSpace(searchText)){
+            await getNotes();
+            return;
+        }
+
         var request = new NoteSearchRequest()
         {
             SearchText = searchText
@@ -275,5 +280,10 @@ else
             isDeleteBtnDisabled = true;
         else
             isDeleteBtnDisabled = false;
+    }
+
+    public async Task searchTextInputKeyDownEvent(KeyboardEventArgs e){
+        if (e.Code == "Enter")
+            await search();
     }
 }
