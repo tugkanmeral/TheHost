@@ -14,40 +14,40 @@
 
 @if (notes == null)
 {
-        <p><em>Notes loading...</em></p>
+    <p><em>Notes loading...</em></p>
 }
 else
 {
-        <div class="input-group mb-3">
-            <div class="input-group-prepend">
-                <span class="input-group-text" id="search-text">Search text</span>
-            </div>
-            <input type="text" class="form-control" placeholder="Search text" aria-label="Search text"
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="search-text">Search text</span>
+        </div>
+        <input type="text" class="form-control" placeholder="Search text" aria-label="Search text"
         aria-describedby="search-text" @bind="searchText" @bind:event="oninput"
         @onkeydown="@(async (e) => await searchTextInputKeyDownEvent(e))" />
-            <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="button" @onclick="@(async e => await search())">Search</button>
-            </div>
+        <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="button" @onclick="@(async e => await search())">Search</button>
         </div>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th />
-                    <th>Title</th>
-                    <th>Text</th>
-                    <th>
-                        Tags
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th />
+                <th>Title</th>
+                <th>Text</th>
+                <th>
+                    Tags
                     @foreach (var tag in filterTags)
                     {
                         <div @onclick="@(async () => await removeFromFilterTag(tag))">
                             <span class="badge red-badge">@tag</span>
                         </div>
                     }
-                    </th>
-                    <th>Creation Date</th>
-                </tr>
-            </thead>
-            <tbody>
+                </th>
+                <th>Creation Date</th>
+            </tr>
+        </thead>
+        <tbody>
             @foreach (var note in notes)
             {
                 <tr>
@@ -59,41 +59,41 @@ else
                     <td>@note.Title</td>
                     <td>@note.Text</td>
                     <td>
-                    @foreach (var tag in note.Tags)
-                    {
-                        <div @onclick="@(async () => await filterByTag(tag))">
-                            <span class="badge red-badge">@tag</span>
-                        </div>
-                    }
+                        @foreach (var tag in note.Tags)
+                        {
+                            <div @onclick="@(async () => await filterByTag(tag))">
+                                <span class="badge red-badge">@tag</span>
+                            </div>
+                        }
                     </td>
                     <td>@note.CreationDate</td>
                 </tr>
             }
-            </tbody>
-        </table>
-        <nav>
-            <ul class="pagination">
+        </tbody>
+    </table>
+    <nav>
+        <ul class="pagination">
             @if (!isPreviousPageBtnDisabled)
             {
-                        <li class="page-item" @onclick="previousPage"><a class="page-link" style="cursor: pointer;">Previous</a></li>
+                <li class="page-item" @onclick="previousPage"><a class="page-link" style="cursor: pointer;">Previous</a></li>
             }
             else
             {
-                        <li class="page-item"><a class="page-link" style="color: grey;">Previous</a></li>
+                <li class="page-item"><a class="page-link" style="color: grey;">Previous</a></li>
             }
 
-                <li class="page-item disabled"><a class="page-link">@currentPage</a></li>
+            <li class="page-item disabled"><a class="page-link">@currentPage</a></li>
 
             @if (!isNextPageBtnDisabled)
             {
-                        <li class="page-item" @onclick="nextPage"><a class="page-link" style="cursor: pointer;">Next</a></li>
+                <li class="page-item" @onclick="nextPage"><a class="page-link" style="cursor: pointer;">Next</a></li>
             }
             else
             {
-                        <li class="page-item"><a class="page-link" style="color: grey;">Next</a></li>
+                <li class="page-item"><a class="page-link" style="color: grey;">Next</a></li>
             }
-            </ul>
-        </nav>
+        </ul>
+    </nav>
 }
 
 <div class="input-group mb-3">
