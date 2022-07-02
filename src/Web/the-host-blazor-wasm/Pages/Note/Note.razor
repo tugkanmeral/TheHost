@@ -32,7 +32,11 @@ else
     <table class="table">
         <thead>
             <tr>
-                <th />
+                <th>
+                     <button class="btn" @onclick="@(async () => await newNote())">
+                        <span class="oi oi-plus" aria-hidden="true" />
+                    </button>
+                </th>
                 <th>Title</th>
                 <th>Text</th>
                 <th>
@@ -96,35 +100,37 @@ else
     </nav>
 }
 
-<div class="input-group mb-3">
-    <div class="input-group-prepend">
-        <span class="input-group-text" id="note-title">Title</span>
+<!-- Modal -->
+<div class="modal fade" id="noteDetailModal" tabindex="-1" role="dialog" aria-labelledby="noteDetailModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="noteDetailModalLabel">@(String.IsNullOrWhiteSpace(NoteItem.Title) ? "New note"
+                    :NoteItem.Title)</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h6>Title</h6>
+                <input type="text" class="form-control" placeholder="Title" @bind="NoteItem.Title" />
+                <br />
+                <h6>Text</h6>
+                    <textarea type="text" class="form-control" placeholder="Text" rows="5" @bind="NoteItem.Text"></textarea>
+                <br />
+                <h6>Tags</h6>
+                 <input type="text" class="form-control" placeholder="ex: #red #important #meeting" @bind="NoteItem.TagsText" />
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" @onclick="upsert">Save</button>
+                <button class="btn btn-danger" @onclick="@(e => delete(note.Id))"
+                    hidden="@isDeleteBtnDisabled">Delete</button>
+                <button class="btn btn-default" @onclick="(async () => await cancel())" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
     </div>
-    <input type="text" class="form-control" placeholder="Title" aria-label="Title" aria-describedby="note-title"
-        @bind="NoteItem.Title" />
 </div>
-<div class="input-group mb-3">
-    <div class="input-group-prepend">
-        <span class="input-group-text" id="note-text">Text</span>
-    </div>
-    <textarea type="text" class="form-control" placeholder="Text" aria-label="Text" aria-describedby="note-text"
-        @bind="NoteItem.Text"></textarea>
-</div>
-
-<button class="btn btn-primary" @onclick="upsert">Save</button>
-<button class="btn btn-danger" @onclick="@(e => delete(note.Id))" disabled="@isDeleteBtnDisabled">Delete</button>
-<button class="btn btn-default" @onclick="cancel">Cancel</button>
-
-<style>
-    .badge {
-        background-color: red;
-        color: white;
-        padding: 4px 8px;
-        text-align: center;
-        border-radius: 5px;
-        margin: 0px 2px;
-    }
-</style>
 
 @code {
     private Models.Note[]? notes;
@@ -186,13 +192,28 @@ else
     private async Task getNote(string id)
     {
         var response = await Http.GetFromJsonAsync<Models.Note>(noteGetUrl + id);
-        if (response != null)
-            NoteItem = response;
+        if (response == null){
+            await JsRuntime.InvokeVoidAsync("console.error", "Error while getting note");
+            return;
+        }
+        
+        NoteItem = response;
+        await setTags();
+
+        await JsRuntime.InvokeVoidAsync("modalAction", "#noteDetailModal", "show");
+    }
+
+    private async Task setTags(){
+        if (NoteItem.Tags.Count() != 0)
+        {
+            NoteItem.TagsText = "#";
+            NoteItem.TagsText += String.Join(" #", NoteItem.Tags);
+        }
     }
 
     public async Task search()
     {
-        if (String.IsNullOrWhiteSpace(searchText))
+        if (String.IsNullOrWhiteSpace(searchText) && (filterTags == null || filterTags.Count == 0) )
         {
             await getNotes();
             return;
@@ -234,11 +255,25 @@ else
         if (NoteItem?.Title == null || NoteItem.Text == null)
             return;
 
+        if (!String.IsNullOrWhiteSpace(NoteItem.TagsText))
+        {
+            if (NoteItem.TagsText[0] == '#')
+                NoteItem.TagsText = NoteItem.TagsText.Remove(0,1);
+
+            NoteItem.TagsText = NoteItem.TagsText.Replace(" ", "");
+            NoteItem.Tags = new List<string>();
+            NoteItem.Tags.AddRange(NoteItem.TagsText.Split('#').ToList());
+        }
+        else {
+            NoteItem.Tags = new List<string>();
+        }
+
         var model = new Models.NoteUpsertModel()
         {
             Id = NoteItem?.Id,
             Title = NoteItem?.Title,
-            Text = NoteItem?.Text
+            Text = NoteItem?.Text,
+            Tags = NoteItem?.Tags
         };
 
         HttpResponseMessage response;
@@ -250,7 +285,7 @@ else
         if (response.IsSuccessStatusCode)
             await getNotes();
 
-        cancel();
+        await cancel();
     }
 
     private async Task delete(string? id)
@@ -263,10 +298,13 @@ else
         if (response.IsSuccessStatusCode)
             await getNotes();
 
-        cancel();
+        await cancel();
     }
 
-    public void cancel() => NoteItem = new Models.Note();
+    public async Task cancel() {
+         NoteItem = new Models.Note();
+        await JsRuntime.InvokeVoidAsync("modalAction", "#noteDetailModal", "hide");
+    }
 
     private void getRoutes()
     {
@@ -331,5 +369,9 @@ else
     {
         filterTags.RemoveAll(x => x == tag);
         await search();
+    }
+
+    private async Task newNote(){
+        await JsRuntime.InvokeVoidAsync("modalAction", "#noteDetailModal", "show");
     }
 }

@@ -75,6 +75,10 @@ a,
   margin: 0px 2px;
 }
 
+.badge:hover {
+  cursor: pointer;
+}
+
 .red-badge {
   background-color: red;
 }
