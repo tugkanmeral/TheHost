@@ -39,9 +39,9 @@ else
                         Tags
                     @foreach (var tag in filterTags)
                     {
-                                <div @onclick="@(async () => await removeFromFilterTag(tag))">
-                                    <span class="badge red-badge">@tag</span>
-                                </div>
+                        <div @onclick="@(async () => await removeFromFilterTag(tag))">
+                            <span class="badge red-badge">@tag</span>
+                        </div>
                     }
                     </th>
                     <th>Creation Date</th>
@@ -50,24 +50,24 @@ else
             <tbody>
             @foreach (var note in notes)
             {
-                        <tr>
-                            <td>
-                                <button class="btn" @onclick="@(async e => await getNote(note.Id))">
-                                    <span class="oi oi-pencil" aria-hidden="true" />
-                                </button>
-                            </td>
-                            <td>@note.Title</td>
-                            <td>@note.Text</td>
-                            <td>
-                        @foreach (var tag in note.Tags)
-                        {
-                                        <div @onclick="@(async () => await filterByTag(tag))">
-                                            <span class="badge red-badge">@tag</span>
-                                        </div>
-                        }
-                            </td>
-                            <td>@note.CreationDate</td>
-                        </tr>
+                <tr>
+                    <td>
+                        <button class="btn" @onclick="@(async e => await getNote(note.Id))">
+                            <span class="oi oi-pencil" aria-hidden="true" />
+                        </button>
+                    </td>
+                    <td>@note.Title</td>
+                    <td>@note.Text</td>
+                    <td>
+                    @foreach (var tag in note.Tags)
+                    {
+                        <div @onclick="@(async () => await filterByTag(tag))">
+                            <span class="badge red-badge">@tag</span>
+                        </div>
+                    }
+                    </td>
+                    <td>@note.CreationDate</td>
+                </tr>
             }
             </tbody>
         </table>
