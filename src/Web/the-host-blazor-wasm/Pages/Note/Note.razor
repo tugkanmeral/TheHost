@@ -198,12 +198,12 @@ else
         }
         
         NoteItem = response;
-        await setTags();
+        await setTagsText();
 
         await JsRuntime.InvokeVoidAsync("modalAction", "#noteDetailModal", "show");
     }
 
-    private async Task setTags(){
+    private async Task setTagsText(){
         if (NoteItem.Tags.Count() != 0)
         {
             NoteItem.TagsText = "#";
@@ -255,18 +255,7 @@ else
         if (NoteItem?.Title == null || NoteItem.Text == null)
             return;
 
-        if (!String.IsNullOrWhiteSpace(NoteItem.TagsText))
-        {
-            if (NoteItem.TagsText[0] == '#')
-                NoteItem.TagsText = NoteItem.TagsText.Remove(0,1);
-
-            NoteItem.TagsText = NoteItem.TagsText.Replace(" ", "");
-            NoteItem.Tags = new List<string>();
-            NoteItem.Tags.AddRange(NoteItem.TagsText.Split('#').ToList());
-        }
-        else {
-            NoteItem.Tags = new List<string>();
-        }
+        NoteItem.Tags = await setTags(NoteItem.TagsText);
 
         var model = new Models.NoteUpsertModel()
         {
@@ -288,6 +277,21 @@ else
         await cancel();
     }
 
+    private async Task<List<string>> setTags(string tagsText){
+        var tags = new List<string>();
+        if (!String.IsNullOrWhiteSpace(tagsText) )
+        {
+            if (tagsText[0] == '#')
+                tagsText = tagsText.Remove(0,1);
+
+            tagsText = tagsText.Replace(" ", "");
+            tags.AddRange(NoteItem.TagsText.Split('#').ToList());
+        
+        }
+
+        return tags;
+    }
+
     private async Task delete(string? id)
     {
         if (String.IsNullOrWhiteSpace(id))
@@ -302,7 +306,7 @@ else
     }
 
     public async Task cancel() {
-         NoteItem = new Models.Note();
+        NoteItem = new Models.Note();
         await JsRuntime.InvokeVoidAsync("modalAction", "#noteDetailModal", "hide");
     }
 
