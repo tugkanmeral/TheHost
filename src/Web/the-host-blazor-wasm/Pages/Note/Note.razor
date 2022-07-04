@@ -198,12 +198,13 @@ else
         }
         
         NoteItem = response;
-        await setTagsText();
+        setTagsText();
 
         await JsRuntime.InvokeVoidAsync("modalAction", "#noteDetailModal", "show");
     }
 
-    private async Task setTagsText(){
+    private void setTagsText()
+    {
         if (NoteItem.Tags.Count() != 0)
         {
             NoteItem.TagsText = "#";
@@ -255,7 +256,7 @@ else
         if (NoteItem?.Title == null || NoteItem.Text == null)
             return;
 
-        NoteItem.Tags = await setTags(NoteItem.TagsText);
+        NoteItem.Tags = setTags(NoteItem.TagsText);
 
         var model = new Models.NoteUpsertModel()
         {
@@ -277,18 +278,15 @@ else
         await cancel();
     }
 
-    private async Task<List<string>> setTags(string tagsText){
+    private List<string> setTags(string tagsText){
         var tags = new List<string>();
-        if (!String.IsNullOrWhiteSpace(tagsText) )
-        {
-            if (tagsText[0] == '#')
-                tagsText = tagsText.Remove(0,1);
+        if (String.IsNullOrWhiteSpace(tagsText))
+            return tags;
 
-            tagsText = tagsText.Replace(" ", "");
-            tags.AddRange(NoteItem.TagsText.Split('#').ToList());
+        tagsText = tagsText.Replace(" ", "");
+
+        tags.AddRange(NoteItem.TagsText.Split('#').ToList().Where(x => !String.IsNullOrWhiteSpace(x)));
         
-        }
-
         return tags;
     }
 
