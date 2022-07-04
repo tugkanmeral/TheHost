@@ -285,7 +285,12 @@ else
 
         tagsText = tagsText.Replace(" ", "");
 
-        tags.AddRange(NoteItem.TagsText.Split('#').ToList().Where(x => !String.IsNullOrWhiteSpace(x)));
+        foreach(var tag in NoteItem.TagsText.Split('#').ToList()){
+            if (String.IsNullOrWhiteSpace(tag))
+                continue;
+                
+            tags.Add(tag.Trim());
+        }
         
         return tags;
     }
