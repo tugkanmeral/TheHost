@@ -93,7 +93,7 @@ else
         {
             for (int j = 0; j < colNamesCount; j++)
             {
-                var value = item.GetProperty(_config.ColumnNames[j]).ToString();
+                var value = item.GetProperty(_config!.ColumnNames[j]).ToString();
                 dataSet[count, j] = value;
             }
             count++;

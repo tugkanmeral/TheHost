@@ -253,17 +253,17 @@ else
 
     public async Task upsert()
     {
-        if (NoteItem?.Title == null || NoteItem.Text == null)
+        if (NoteItem.Title == null || NoteItem.Text == null)
             return;
 
-        NoteItem.Tags = setTags(NoteItem.TagsText);
+        NoteItem.Tags = setTags(NoteItem.TagsText ?? String.Empty);
 
         var model = new Models.NoteUpsertModel()
         {
-            Id = NoteItem?.Id,
-            Title = NoteItem?.Title,
-            Text = NoteItem?.Text,
-            Tags = NoteItem?.Tags
+            Id = NoteItem.Id,
+            Title = NoteItem.Title,
+            Text = NoteItem.Text,
+            Tags = NoteItem.Tags
         };
 
         HttpResponseMessage response;
@@ -285,10 +285,12 @@ else
 
         tagsText = tagsText.Replace(" ", "");
 
-        foreach(var tag in NoteItem.TagsText.Split('#').ToList()){
+        var noteItemTags = (NoteItem.TagsText ?? String.Empty).Split('#').ToList();
+        foreach(var tag in noteItemTags)
+        {
             if (String.IsNullOrWhiteSpace(tag))
                 continue;
-                
+
             tags.Add(tag.Trim());
         }
         
