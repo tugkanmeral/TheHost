@@ -1,14 +1,12 @@
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
-WORKDIR /src
-COPY the-host-blazor-wasm.csproj .
-RUN dotnet restore the-host-blazor-wasm.csproj
-COPY . .
-RUN dotnet build the-host-blazor-wasm.csproj -c Release -o /app/build
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
+WORKDIR /app
 
-FROM build AS publish
-RUN dotnet publish the-host-blazor-wasm.csproj -c Release -o /app/publish
+COPY . ./
+RUN dotnet publish -c Release -o output
 
-FROM nginx:alpine AS final
-WORKDIR /usr/share/nginx/html
-COPY --from=publish /app/publish/wwwroot .
+FROM nginx:alpine
+
+WORKDIR /var/www/web
+COPY --from=build-env /app/output/wwwroot .
 COPY nginx.conf /etc/nginx/nginx.conf
+EXPOSE 80
