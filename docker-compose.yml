@@ -1,6 +1,7 @@
 version: '3'
 services:
   web:
+   image: tugkanmeral/the-host-web:latest
    build: 
      context: ./src/Web/the-host-blazor-wasm
      dockerfile: Dockerfile
@@ -11,7 +12,7 @@ services:
    container_name: the-host-blazor-wasm-container
 
   auth:
-    image: the-host-auth
+    image: tugkanmeral/the-host-auth
     build: 
       context: ./src/Services/Auth
       dockerfile: Dockerfile
@@ -22,7 +23,7 @@ services:
     container_name: the-host-auth-container
 
   password:
-    image: the-host-password
+    image: tugkanmeral/the-host-password
     build: 
       context: ./src/Services/Password
       dockerfile: Dockerfile
@@ -33,18 +34,18 @@ services:
     container_name: the-host-password-container
 
   note:
+    image: tugkanmeral/the-host-note
     build: 
       context: ./src/Services/Note
       dockerfile: Dockerfile
     ports: 
       - 5003:8080
-    image: the-host-note
     networks:
       - the-host-br-network
     container_name: the-host-note-container
 
   user:
-    image: the-host-user
+    image: tugkanmeral/the-host-user
     build: 
       context: ./src/Services/User
       dockerfile: Dockerfile
