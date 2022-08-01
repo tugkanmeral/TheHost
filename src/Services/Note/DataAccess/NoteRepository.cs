@@ -45,7 +45,11 @@ public class NoteRepository : INoteRepository, IMongoDbRepository<En.Note>
                             .Include(x => x.LastUpdateDate)
                             .Include(x => x.CreationDate);
 
-        var notes = Collection.Find(findFilter).Project<En.Note>(projection).Skip(skip).Limit(take).ToList();
+        var sorting = Builders<En.Note>
+                        .Sort
+                        .Descending(x => x.CreationDate);
+
+        var notes = Collection.Find(findFilter).Project<En.Note>(projection).Sort(sorting).Skip(skip).Limit(take).ToList();
 
         return notes;
     }
