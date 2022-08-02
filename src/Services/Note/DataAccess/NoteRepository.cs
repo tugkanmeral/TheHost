@@ -50,6 +50,7 @@ public class NoteRepository : INoteRepository, IMongoDbRepository<En.Note>
                         .Descending(x => x.CreationDate);
 
         var notes = Collection.Find(findFilter).Project<En.Note>(projection).Sort(sorting).Skip(skip).Limit(take).ToList();
+        
 
         return notes;
     }
@@ -66,8 +67,20 @@ public class NoteRepository : INoteRepository, IMongoDbRepository<En.Note>
 
         if (filters == null)
             throw new Exception("Filter cannot be null.");
+        
+        var projection = Builders<En.Note>
+                            .Projection
+                            .Include(x => x.Title)
+                            .Include(x => x.Text)
+                            .Include(x => x.Tags)
+                            .Include(x => x.LastUpdateDate)
+                            .Include(x => x.CreationDate);
 
-        var notes = await Collection.Find(filters).Skip(skip).Limit(take).ToListAsync();
+        var sorting = Builders<En.Note>
+                        .Sort
+                        .Descending(x => x.CreationDate);
+
+        var notes = await Collection.Find(filters).Project<En.Note>(projection).Sort(sorting).Skip(skip).Limit(take).ToListAsync();
 
         return notes;
     }
