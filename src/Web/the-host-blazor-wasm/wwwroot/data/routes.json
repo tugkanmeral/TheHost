@@ -57,10 +57,6 @@
         {
             "name": "noteDelete",
             "url": "api/notes/"
-        },
-        {
-            "name": "noteSearch",
-            "url": "api/notes/searchNote"
         }
     ]
 }]

@@ -7,7 +7,6 @@
 @inject StateContainer StateContainer
 @inject NavigationManager NavigationManager
 
-
 <PageTitle>Note</PageTitle>
 
 <h1>Notes</h1>
@@ -26,7 +25,7 @@ else
         aria-describedby="search-text" @bind="searchText" @bind:event="oninput"
         @onkeydown="@(async (e) => await searchTextInputKeyDownEvent(e))" />
         <div class="input-group-append">
-            <button class="btn btn-outline-secondary" type="button" @onclick="@(async e => await search())">Search</button>
+            <button class="btn btn-outline-secondary" type="button" @onclick="@(async e => await getNotes())">Search</button>
         </div>
     </div>
     <table class="table">
@@ -141,7 +140,6 @@ else
     string? noteInsertUrl = null;
     string? noteUpdateUrl = null;
     string? noteDeleteUrl = null;
-    string? noteSearchUrl = null;
     private bool isDeleteBtnDisabled = false;
     private bool isPreviousPageBtnDisabled = true;
     private bool isNextPageBtnDisabled = true;
@@ -180,6 +178,18 @@ else
     private async Task getNotes()
     {
         var notesGetUrlWParameter = notesGetUrl + "?skip=" + skip + "&take=" + take;
+
+        if (!String.IsNullOrWhiteSpace(searchText)) 
+            notesGetUrlWParameter += $"&searchText={searchText}";
+
+        if (filterTags != null && filterTags.Count > 0)
+        {
+            foreach (var tag in filterTags)
+            {
+                notesGetUrlWParameter += $"&tags={tag}";
+            }
+        }
+
         var notesModel = await Http.GetFromJsonAsync<Models.NotesResponseModel>(notesGetUrlWParameter);
         notes = notesModel?.Items;
         currentPage = (skip / take) + 1;
@@ -210,32 +220,6 @@ else
             NoteItem.TagsText = "#";
             NoteItem.TagsText += String.Join(" #", NoteItem.Tags);
         }
-    }
-
-    public async Task search()
-    {
-        if (String.IsNullOrWhiteSpace(searchText) && (filterTags == null || filterTags.Count == 0) )
-        {
-            await getNotes();
-            return;
-        }
-
-        var request = new NoteSearchRequest()
-        {
-            SearchText = searchText,
-            Tags = filterTags
-        };
-
-        var response = await Http.PostAsJsonAsync(noteSearchUrl, request);
-
-        if (!response.IsSuccessStatusCode)
-            return;
-
-        var notesJson = await response.Content.ReadAsStringAsync();
-        notes = JsonSerializer.Deserialize<Models.Note[]>(notesJson, new JsonSerializerOptions()
-        {
-            PropertyNameCaseInsensitive = true
-        });
     }
 
     private void setPaginationBtnsDisability()
@@ -327,7 +311,6 @@ else
         noteInsertUrl = getRoute(noteServiceRoute, "noteInsert");
         noteUpdateUrl = getRoute(noteServiceRoute, "noteUpdate");
         noteDeleteUrl = getRoute(noteServiceRoute, "noteDelete");
-        noteSearchUrl = getRoute(noteServiceRoute, "noteSearch");
     }
 
     private string getRoute(TheHostRouteModel theHostRoute, string routeName)
@@ -364,20 +347,20 @@ else
     private async Task searchTextInputKeyDownEvent(KeyboardEventArgs e)
     {
         if (e.Code == "Enter" || e.Code == "NumpadEnter")
-            await search();
+            await getNotes();
     }
 
     private async Task filterByTag(string tag)
     {
         if (!filterTags.Any(x => x == tag))
             filterTags.Add(tag);
-        await search();
+        await getNotes();
     }
 
     private async Task removeFromFilterTag(string tag)
     {
         filterTags.RemoveAll(x => x == tag);
-        await search();
+        await getNotes();
     }
 
     private async Task newNote(){

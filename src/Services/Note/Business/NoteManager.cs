@@ -22,27 +22,12 @@ public class NoteManager : INoteService
         }
     }
 
-    public IEnumerable<En.Note> GetNotes(string userId, int skip, int take, string? searchText)
+    public IEnumerable<En.Note> GetNotes(string userId, int skip, int take, string? searchText, string[]? tags)
     {
-        List<En.Note> notes = new();
+        IEnumerable<En.Note> notes;
         try
         {
-            notes = _noteRepository.Get(userId, skip, take, searchText);
-        }
-        catch (Exception ex)
-        {
-            throw new Exception("Error while passwords getting", ex);
-        }
-
-        return notes;
-    }
-
-    public async Task<IEnumerable<En.Note>> SearchNote(string userId, int skip, int take, string? searchText, string[]? tags)
-    {
-        List<En.Note> notes = new();
-        try
-        {
-            notes = await _noteRepository.SearchNote(userId, skip, take, searchText, tags);
+            notes = _noteRepository.Get(userId, skip, take, searchText, tags);
         }
         catch (Exception ex)
         {

@@ -33,31 +33,11 @@ public class NoteRepository : INoteRepository, IMongoDbRepository<En.Note>
         Collection.InsertOne(note);
     }
 
-    public List<En.Note> Get(string userId, int skip, int take, string? searchText)
-    {
-        var findFilter = Builders<En.Note>.Filter.Eq(x => x.OwnerId, userId);
-
-        var projection = Builders<En.Note>
-                            .Projection
-                            .Include(x => x.Title)
-                            .Include(x => x.Text)
-                            .Include(x => x.Tags)
-                            .Include(x => x.LastUpdateDate)
-                            .Include(x => x.CreationDate);
-
-        var sorting = Builders<En.Note>
-                        .Sort
-                        .Descending(x => x.CreationDate);
-
-        var notes = Collection.Find(findFilter).Project<En.Note>(projection).Sort(sorting).Skip(skip).Limit(take).ToList();
-        
-
-        return notes;
-    }
-
-    public async Task<List<En.Note>> SearchNote(string userId, int skip, int take, string? searchText, string[]? tags)
+    public IEnumerable<En.Note> Get(string userId, int skip, int take, string? searchText, string[]? tags)
     {
         FilterDefinition<En.Note>? filters = Builders<En.Note>.Filter.Empty;
+
+        filters &= Builders<En.Note>.Filter.Eq(x => x.OwnerId, userId);
 
         if (!String.IsNullOrWhiteSpace(searchText))
             filters &= Builders<En.Note>.Filter.Text(searchText);
@@ -65,9 +45,6 @@ public class NoteRepository : INoteRepository, IMongoDbRepository<En.Note>
         if (tags != null && tags.Length > 0)
             filters &= Builders<En.Note>.Filter.All("Tags", tags);
 
-        if (filters == null)
-            throw new Exception("Filter cannot be null.");
-        
         var projection = Builders<En.Note>
                             .Projection
                             .Include(x => x.Title)
@@ -80,7 +57,7 @@ public class NoteRepository : INoteRepository, IMongoDbRepository<En.Note>
                         .Sort
                         .Descending(x => x.CreationDate);
 
-        var notes = await Collection.Find(filters).Project<En.Note>(projection).Sort(sorting).Skip(skip).Limit(take).ToListAsync();
+        var notes = Collection.Find(filters).Project<En.Note>(projection).Sort(sorting).Skip(skip).Limit(take).ToList();
 
         return notes;
     }

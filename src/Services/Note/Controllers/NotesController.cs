@@ -28,9 +28,9 @@ public class NotesController : ControllerBase
 
     // GET: api/<NotesController>
     [HttpGet]
-    public async Task<ItemsResponse> Get(int skip = 0, int take = 10, string? searchText = null)
+    public async Task<ItemsResponse> Get(int skip = 0, int take = 10, string? searchText = null, [FromQuery(Name = "tags")] string[]? tags = null)
     {
-        var notes = _noteService.GetNotes(User.GetUserId(), skip, take, searchText);
+        var notes = _noteService.GetNotes(User.GetUserId(), skip, take, searchText, tags);
         var totalNotesCount = await _noteService.GetTotalNotesCount(User.GetUserId());
 
         ItemsResponse response = new();
@@ -38,6 +38,7 @@ public class NotesController : ControllerBase
         response.TotalItemCount = totalNotesCount;
         response.Skip = skip;
         response.Take = take;
+
         return response;
     }
 
@@ -64,15 +65,5 @@ public class NotesController : ControllerBase
     {
         _noteService.DeleteNote(id, User.GetUserId());
         return Ok();
-    }
-
-    [HttpPost("searchNote")]
-    public async Task<IActionResult> SearchNote(SearchNoteRequest request)
-    {
-        if (String.IsNullOrWhiteSpace(request.SearchText) && request.Tags == null)
-            return BadRequest("SearchText and Tags cannot be null. At least, one of them should have a value!");
-
-        var notes = await _noteService.SearchNote(User.GetUserId(), request.Skip, request.Take, request.SearchText, request.Tags);
-        return Ok(notes);
     }
 }
