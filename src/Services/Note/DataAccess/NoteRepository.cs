@@ -35,29 +35,41 @@ public class NoteRepository : INoteRepository, IMongoDbRepository<En.Note>
 
     public IEnumerable<En.Note> Get(string userId, int skip, int take, string? searchText, string[]? tags)
     {
-        FilterDefinition<En.Note>? filters = Builders<En.Note>.Filter.Empty;
-
-        filters &= Builders<En.Note>.Filter.Eq(x => x.OwnerId, userId);
+        BsonArray matchAnd = new();
 
         if (!String.IsNullOrWhiteSpace(searchText))
-            filters &= Builders<En.Note>.Filter.Text(searchText);
+            matchAnd.Add(new BsonDocument("$text", new BsonDocument("$search", searchText)));
+
+        matchAnd.Add(new BsonDocument("OwnerId", userId));
 
         if (tags != null && tags.Length > 0)
-            filters &= Builders<En.Note>.Filter.All("Tags", tags);
+        {
+            BsonArray tagValues = new();
+            foreach (var tag in tags)
+            {
+                tagValues.Add(tag);
+            }
+            matchAnd.Add(new BsonDocument("Tags", new BsonDocument("$in", tagValues)));
+        }
 
-        var projection = Builders<En.Note>
-                            .Projection
-                            .Include(x => x.Title)
-                            .Include(x => x.Text)
-                            .Include(x => x.Tags)
-                            .Include(x => x.LastUpdateDate)
-                            .Include(x => x.CreationDate);
+        var match = new BsonDocument("$match", new BsonDocument("$and", matchAnd));
 
-        var sorting = Builders<En.Note>
-                        .Sort
-                        .Descending(x => x.CreationDate);
+        var projection = new BsonDocument("$project", new BsonDocument()
+        {
+            {"Title", 1},
+            {"Text", new BsonDocument("$substrBytes", new BsonArray(new BsonValue[]{"$Text", 0, 100}))},
+            {"Tags", 1},
+            {"CreationDate", 1},
+            {"_id", 0}
+        });
 
-        var notes = Collection.Find(filters).Project<En.Note>(projection).Sort(sorting).Skip(skip).Limit(take).ToList();
+        var sorting = new BsonDocument("$sort", new BsonDocument("CreationDate", -1));
+
+        var skiping = new BsonDocument("$skip", skip);
+        var limit = new BsonDocument("$limit", take);
+
+        var pipeline = new[] { match, projection, sorting, skiping, limit };
+        var notes = Collection.Aggregate(PipelineDefinition<En.Note, En.Note>.Create(pipeline)).ToList();
 
         return notes;
     }
