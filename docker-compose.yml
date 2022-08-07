@@ -1,5 +1,16 @@
 version: '3'
 services:
+  gateway:
+    image: tugkanmeral/the-host-gateway-ocelot:latest
+    build: 
+      context: ./src/ApiGateways/OcelotGW
+      dockerfile: Dockerfile
+    ports: 
+      - 5005:8080
+    networks:
+      - the-host-br-network
+    container_name: the-host-gateway-ocelot-container
+
   web:
    image: tugkanmeral/the-host-web:latest
    build: 
