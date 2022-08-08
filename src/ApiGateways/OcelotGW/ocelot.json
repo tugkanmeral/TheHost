@@ -1,6 +1,78 @@
 {
     "Routes": [
         {
+            "DownstreamPathTemplate": "/api/notes/{id}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "the-host-note-container",
+                    "Port": 8080
+                }
+            ],
+            "UpstreamPathTemplate": "/notes/{id}",
+            "UpstreamHttpMethod": [ "Get", "Put", "Delete" ]
+        },
+        {
+            "DownstreamPathTemplate": "/api/notes",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "the-host-note-container",
+                    "Port": 8080
+                }
+            ],
+            "UpstreamPathTemplate": "/notes",
+            "UpstreamHttpMethod": [ "Get", "Post" ]
+        },
+        {
+            "DownstreamPathTemplate": "/api/auth/getToken",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "the-host-auth-container",
+                    "Port": 8080
+                }
+            ],
+            "UpstreamPathTemplate": "/auth/getToken",
+            "UpstreamHttpMethod": [ "Post" ]
+        },
+        {
+            "DownstreamPathTemplate": "/api/dashboard/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "the-host-password-container",
+                    "Port": 8080
+                }
+            ],
+            "UpstreamPathTemplate": "/passwords/dashboard/{everything}",
+            "UpstreamHttpMethod": [ "Get" ]
+        },
+        {
+            "DownstreamPathTemplate": "/api/passwords",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "the-host-password-container",
+                    "Port": 8080
+                }
+            ],
+            "UpstreamPathTemplate": "/passwords",
+            "UpstreamHttpMethod": [ "Get", "Post" ]
+        },
+        {
+            "DownstreamPathTemplate": "/api/passwords/{id}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "the-host-password-container",
+                    "Port": 8080
+                }
+            ],
+            "UpstreamPathTemplate": "/passwords/{id}",
+            "UpstreamHttpMethod": [ "Get", "Put", "Delete" ]
+        },
+        {
             "DownstreamPathTemplate": "/api/user/{everything}",
             "DownstreamScheme": "http",
             "DownstreamHostAndPorts": [
