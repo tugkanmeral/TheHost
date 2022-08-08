@@ -59,8 +59,7 @@ public class NoteRepository : INoteRepository, IMongoDbRepository<En.Note>
             {"Title", 1},
             {"Text", new BsonDocument("$substrBytes", new BsonArray(new BsonValue[]{"$Text", 0, 100}))},
             {"Tags", 1},
-            {"CreationDate", 1},
-            {"_id", 0}
+            {"CreationDate", 1}
         });
 
         var sorting = new BsonDocument("$sort", new BsonDocument("CreationDate", -1));
