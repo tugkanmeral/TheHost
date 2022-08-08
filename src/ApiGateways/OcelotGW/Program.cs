@@ -1,6 +1,8 @@
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 
+string policyName = "TheHostPolicy";
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddJsonFile("ocelot.json");
@@ -11,6 +13,20 @@ builder.Services.AddEndpointsApiExplorer();
 // builder.Services.AddSwaggerGen();
 builder.Services.AddOcelot();
 
+// "AllowedHosts": "http://localhost:3000,http://localhost:5000" in appsettings.json
+var allowedHosts = builder.Configuration.GetSection("AllowedHosts").Value.Trim().Split(",");
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: policyName,
+                      builder =>
+                      {
+                          builder
+                            .WithOrigins(allowedHosts)
+                            .AllowAnyMethod()
+                            .AllowAnyHeader();
+                      });
+});
+
 var app = builder.Build();
 
 //if (app.Environment.IsDevelopment())
@@ -20,6 +36,8 @@ var app = builder.Build();
 //}
 
 // app.UseHttpsRedirection();
+
+app.UseCors(policyName);
 
 app.UseAuthorization();
 
