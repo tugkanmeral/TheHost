@@ -1,62 +1,62 @@
 [{
     "service": "Auth",
-    "url": "http://localhost:5001/",
+    "url": "http://localhost:5005/",
     "endPoints": [
         {
             "name": "getToken",
-            "url": "api/auth/getToken"
+            "url": "auth/getToken"
         }
     ]
 },
 {
     "service": "Password",
-    "url": "http://localhost:5002/",
+    "url": "http://localhost:5005/",
     "endPoints": [
         {
             "name": "passwordInsert",
-            "url": "api/passwords"
+            "url": "passwords"
         },
         {
             "name": "passwordUpdate",
-            "url": "api/passwords/"
+            "url": "passwords/"
         },
         {
             "name": "passwords",
-            "url": "api/passwords"
+            "url": "passwords"
         },
         {
             "name": "password",
-            "url": "api/passwords/"
+            "url": "passwords/"
         },
         {
             "name": "passwordDelete",
-            "url": "api/passwords/"
+            "url": "passwords/"
         }
     ]
 },
 {
     "service": "Note",
-    "url": "http://localhost:5003/",
+    "url": "http://localhost:5005/",
     "endPoints": [
         {
             "name": "noteInsert",
-            "url": "api/notes"
+            "url": "notes"
         },
         {
             "name": "noteUpdate",
-            "url": "api/notes/"
+            "url": "notes/"
         },
         {
             "name": "notes",
-            "url": "api/notes"
+            "url": "notes"
         },
         {
             "name": "note",
-            "url": "api/notes/"
+            "url": "notes/"
         },
         {
             "name": "noteDelete",
-            "url": "api/notes/"
+            "url": "notes/"
         }
     ]
 }]
