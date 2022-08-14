@@ -465,3 +465,17 @@ $RECYCLE.BIN/
 ## Docker Mongo volume
 ##
 /data/*
+
+##
+## Vue.js's ignores
+##
+/dist
+.env.local
+.env.*.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.ntvs*
+*.njsproj
+*.sw?
