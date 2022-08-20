@@ -6,7 +6,7 @@ namespace Tool.Controllers;
 [Route("api/[controller]")]
 public class ToolController : ControllerBase
 {
-    [HttpGet(Name = "guid")]
+    [HttpGet("guid")]
     public string Get()
     {
         return Guid.NewGuid().ToString();
