@@ -1,62 +1,74 @@
-[{
+[
+  {
     "service": "Auth",
     "url": "http://localhost:5005/",
     "endPoints": [
-        {
-            "name": "getToken",
-            "url": "auth/getToken"
-        }
+      {
+        "name": "getToken",
+        "url": "auth/getToken"
+      }
     ]
-},
-{
+  },
+  {
     "service": "Password",
     "url": "http://localhost:5005/",
     "endPoints": [
-        {
-            "name": "passwordInsert",
-            "url": "passwords"
-        },
-        {
-            "name": "passwordUpdate",
-            "url": "passwords/"
-        },
-        {
-            "name": "passwords",
-            "url": "passwords"
-        },
-        {
-            "name": "password",
-            "url": "passwords/"
-        },
-        {
-            "name": "passwordDelete",
-            "url": "passwords/"
-        }
+      {
+        "name": "passwordInsert",
+        "url": "passwords"
+      },
+      {
+        "name": "passwordUpdate",
+        "url": "passwords/"
+      },
+      {
+        "name": "passwords",
+        "url": "passwords"
+      },
+      {
+        "name": "password",
+        "url": "passwords/"
+      },
+      {
+        "name": "passwordDelete",
+        "url": "passwords/"
+      }
     ]
-},
-{
+  },
+  {
     "service": "Note",
     "url": "http://localhost:5005/",
     "endPoints": [
-        {
-            "name": "noteInsert",
-            "url": "notes"
-        },
-        {
-            "name": "noteUpdate",
-            "url": "notes/"
-        },
-        {
-            "name": "notes",
-            "url": "notes"
-        },
-        {
-            "name": "note",
-            "url": "notes/"
-        },
-        {
-            "name": "noteDelete",
-            "url": "notes/"
-        }
+      {
+        "name": "noteInsert",
+        "url": "notes"
+      },
+      {
+        "name": "noteUpdate",
+        "url": "notes/"
+      },
+      {
+        "name": "notes",
+        "url": "notes"
+      },
+      {
+        "name": "note",
+        "url": "notes/"
+      },
+      {
+        "name": "noteDelete",
+        "url": "notes/"
+      }
     ]
-}]
+  },
+  {
+    "service": "Tool",
+    "url": "http://localhost:5005/",
+    "endPoints": [
+      {
+        "name": "newGuid",
+        "url": "tool/guid"
+      }
+    ]
+  }
+]

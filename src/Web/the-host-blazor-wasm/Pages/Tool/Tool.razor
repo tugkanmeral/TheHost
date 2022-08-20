@@ -1,0 +1,42 @@
+@page "/tool"
+@inject HttpClient Http
+@inject StateContainer StateContainer
+
+<PageTitle>Tool</PageTitle>
+
+<div class="tool-container">
+    <h4>Guid</h4>
+    <p>@newGuid</p>
+    <button class="btn btn-primary" @onclick="generateGuid">Generate guid</button>
+</div>
+
+@code {
+    private string? newGuidUrl;
+
+    private string? newGuid;
+
+    protected override async Task OnInitializedAsync()
+    {
+        getRoutes();
+    }
+
+    private void getRoutes()
+    {
+        var toolRoute = StateContainer.Routes?.Where(x => x.Service == "Tool").SingleOrDefault();
+
+        if (toolRoute == null)
+            return;
+
+        newGuidUrl = getRoute(toolRoute, "newGuid");
+    }
+
+    private string getRoute(TheHostRouteModel theHostRoute, string routeName)
+    {
+        return theHostRoute.Url + theHostRoute.EndPoints.Where(x => x.Name == routeName).Single()?.Url;
+    }
+
+    private async Task generateGuid()
+    {
+        newGuid = await Http.GetFromJsonAsync<string>(newGuidUrl);
+    }
+}
