@@ -95,6 +95,18 @@
             ],
             "UpstreamPathTemplate": "/user",
             "UpstreamHttpMethod": [ "Post" ]
+        },
+        {
+            "DownstreamPathTemplate": "/api/tool/{everything}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "the-host-tool-container",
+                    "Port": 8080
+                }
+            ],
+            "UpstreamPathTemplate": "/tool/{everything}",
+            "UpstreamHttpMethod": [ "Get" ]
         }
     ],
     "GlobalConfiguration": {
