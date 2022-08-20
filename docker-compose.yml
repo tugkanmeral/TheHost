@@ -55,17 +55,6 @@ services:
       - the-host-br-network
     container_name: the-host-note-container
 
-  tool:
-    image: tugkanmeral/the-host-tool
-    build: 
-      context: ./src/Services/Tool
-      dockerfile: Dockerfile
-    ports: 
-      - 5003:8080
-    networks:
-      - the-host-br-network
-    container_name: the-host-tool-container
-
   user:
     image: tugkanmeral/the-host-user
     build: 
@@ -76,6 +65,17 @@ services:
     networks:
       - the-host-br-network
     container_name: the-host-user-container
+
+  tool:
+    image: tugkanmeral/the-host-tool
+    build: 
+      context: ./src/Services/Tool
+      dockerfile: Dockerfile
+    ports: 
+      - 5006:8080
+    networks:
+      - the-host-br-network
+    container_name: the-host-tool-container
 
   mongo:
     image: "mongo"
