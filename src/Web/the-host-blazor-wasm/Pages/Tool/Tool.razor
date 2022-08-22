@@ -4,10 +4,12 @@
 
 <PageTitle>Tool</PageTitle>
 
-<div class="tool-container">
-    <h4>Guid</h4>
-    <p>@newGuid</p>
-    <button class="btn btn-primary" @onclick="generateGuid">Generate guid</button>
+<div class="container">
+    <div class="border rounded p-3">
+        <h4>Guid</h4>
+        <p>@(newGuid ?? "Guid appear here...")</p>
+        <button class="btn btn-primary" @onclick="generateGuid">Generate guid</button>
+    </div>
 </div>
 
 @code {
@@ -37,6 +39,6 @@
 
     private async Task generateGuid()
     {
-        newGuid = await Http.GetFromJsonAsync<string>(newGuidUrl);
+        newGuid = await Http.GetStringAsync(newGuidUrl);
     }
 }
