@@ -44,6 +44,10 @@
 
     private async Task buildRoutingState()
     {
-        StateContainer.Routes = await Http.GetFromJsonAsync<HashSet<TheHostRouteModel>>("data/routes.json");
+        while (StateContainer.Routes?.Count == 0)
+        {
+            StateContainer.Routes = await Http.GetFromJsonAsync<HashSet<TheHostRouteModel>>("data/routes.json");
+            await Task.Delay(1000);
+        }
     }
 }
