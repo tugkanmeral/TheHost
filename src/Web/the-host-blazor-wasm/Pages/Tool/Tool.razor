@@ -4,11 +4,19 @@
 
 <PageTitle>Tool</PageTitle>
 
+<h1>Tools</h1>
+
 <div class="container">
-    <div class="border rounded p-3">
-        <h4>Guid</h4>
-        <p>@(newGuid ?? "Guid appear here...")</p>
-        <button class="btn btn-primary" @onclick="generateGuid">Generate guid</button>
+    <div class="row">
+        <div class="col-6">
+            <div class="border rounded p-3">
+                <h4>Guid</h4>
+                <p>@(newGuid ?? "Guid appear here...")</p>
+                <div class="button-to-right-container">
+                    <button class="btn btn-primary" @onclick="generateGuid">Generate guid</button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
