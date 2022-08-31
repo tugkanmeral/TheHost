@@ -1,10 +1,16 @@
-import { createApp } from 'vue'
-import App from './App.vue'
-import vuetify from './plugins/vuetify'
-import { loadFonts } from './plugins/webfontloader'
+import { createApp } from "vue";
+import { createPinia } from "pinia";
+import BalmUI from "balm-ui";
 
-loadFonts()
+import App from "./App.vue";
+import router from "./router";
 
-createApp(App)
-  .use(vuetify)
-  .mount('#app')
+import "./assets/main.css";
+
+const app = createApp(App);
+
+app.use(createPinia());
+app.use(router);
+app.use(BalmUI);
+
+app.mount("#app");
