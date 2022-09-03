@@ -10,6 +10,16 @@
     ]
   },
   {
+    "service": "User",
+    "url": "http://localhost:5005/",
+    "endPoints": [
+      {
+        "name": "register",
+        "url": "user/register"
+      }
+    ]
+  },
+  {
     "service": "Password",
     "url": "http://localhost:5005/",
     "endPoints": [
