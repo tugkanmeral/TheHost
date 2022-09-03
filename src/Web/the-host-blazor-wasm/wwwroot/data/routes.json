@@ -15,7 +15,7 @@
     "endPoints": [
       {
         "name": "register",
-        "url": "user/register"
+        "url": "user"
       }
     ]
   },
