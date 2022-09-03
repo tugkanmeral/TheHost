@@ -6,15 +6,13 @@
 
 <h1>Tools</h1>
 
-<div class="container">
-    <div class="row">
-        <div class="col-6">
-            <div class="border rounded p-3">
-                <h4>Guid</h4>
-                <p>@(newGuid ?? "Guid appear here...")</p>
-                <div class="button-to-right-container">
-                    <button class="btn btn-primary" @onclick="generateGuid">Generate guid</button>
-                </div>
+<div class="row">
+    <div class="col-4">
+        <div class="border rounded p-3 mb-3">
+            <h4>Guid</h4>
+            <p>@(newGuid ?? "Guid appear here...")</p>
+            <div class="button-to-right-container">
+                <button class="btn btn-primary" @onclick="generateGuid">Generate guid</button>
             </div>
         </div>
     </div>
