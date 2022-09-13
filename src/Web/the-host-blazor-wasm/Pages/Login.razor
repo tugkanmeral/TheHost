@@ -143,6 +143,10 @@
     public async Task Register()
     {
         var response = await Http.PostAsJsonAsync(registerUrl, NewUser);
+        if (response.IsSuccessStatusCode)
+        {
+            await JsRuntime.InvokeVoidAsync("modalAction", "#userRegisterModal", "hide");
+        }
     }
 
     private void getRoutes()
