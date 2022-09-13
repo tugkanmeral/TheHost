@@ -22,6 +22,17 @@ services:
      - the-host-br-network
    container_name: the-host-blazor-wasm-container
 
+  web-vue:
+   image: tugkanmeral/the-host-web-vue:latest
+   build: 
+     context: ./src/Web/the-host-vue-js
+     dockerfile: Dockerfile
+   ports: 
+     - 8001:80
+   networks:
+     - the-host-br-network
+   container_name: the-host-vue-js-container
+
   auth:
     image: tugkanmeral/the-host-auth
     build: 
