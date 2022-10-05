@@ -1,4 +1,4 @@
-public enum ReminderPriority
+public enum ReminderImportance
 {
     High,
     Mid,
