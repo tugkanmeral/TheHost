@@ -77,6 +77,19 @@ services:
       - the-host-br-network
     container_name: the-host-user-container
 
+  # reminder:
+    # image: tugkanmeral/the-host-reminder
+    # build: 
+      # context: ./src/Services/Reminder
+      # dockerfile: Dockerfile
+    # ports: 
+      # - 5007:8080
+    # networks:
+      # - the-host-br-network
+    # container_name: the-host-reminder-container
+    # depends_on:
+      # - mongo
+
   tool:
     image: tugkanmeral/the-host-tool
     build: 
