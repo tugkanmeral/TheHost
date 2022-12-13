@@ -1,0 +1,226 @@
+{
+    "APP_NAME": {
+        "TR": "The Host",
+        "ENG": "The Host"
+    },
+    "WELCOME": {
+        "TR": "Hoş geldiniz",
+        "ENG": "Welcome"
+    },
+    "PLEASE": {
+        "TR": "Lütfen",
+        "ENG": "Please"
+    },
+    "LOGIN": {
+        "TR": "Giriş yap",
+        "ENG": "Login"
+    },
+    "LOGOUT": {
+        "TR": "Çıkış yap",
+        "ENG": "Logout"
+    },
+    "CREATE": {
+        "TR": "Oluştur",
+        "ENG": "Create"
+    },
+    "LIST": {
+        "TR": "Listele",
+        "ENG": "List"
+    },
+    "ADMIN_PANEL": {
+        "TR": "Yönetici paneli",
+        "ENG": "Admin panel"
+    },
+    "USER_MANAGEMENT": {
+        "TR": "Kullanıcı yönetimi",
+        "ENG": "User management"
+    },
+    "ERR_WHILE_REGISTER": {
+        "TR": "Kayıt esnasında hata oluştu",
+        "ENG": "Error while register"
+    },
+    "NAME_CANNOT_EMPTY": {
+        "TR": "İsim alanı boş olamaz",
+        "ENG": "Name cannot be empty"
+    },
+    "SURNAME_CANNOT_EMPTY": {
+        "TR": "Soyisim alanı boş olamaz",
+        "ENG": "Surname cannot be empty"
+    },
+    "EMAIL_CANNOT_EMPTY": {
+        "TR": "E-posta alanı boş olamaz",
+        "ENG": "E-mail cannot be empty"
+    },
+    "PASS_CANNOT_EMPTY": {
+        "TR": "Şifre alanı boş olamaz",
+        "ENG": "Password cannot be empty"
+    },
+    "PASS_AGAIN_CANNOT_EMPTY": {
+        "TR": "Şifre Tekrar alanı boş olamaz",
+        "ENG": "Password again cannot be empty"
+    },
+    "SURE_PASS_MATCH": {
+        "TR": "Şifre ve şifre tekrar alanları uyuşmuyor",
+        "ENG": "Password is not matching with password again field"
+    },
+    "UESR_REGISTERED": {
+        "TR": "Kullanıcı kayıt edildi",
+        "ENG": "User registered!"
+    },
+    "UESR_CANNOT_REGISTERED": {
+        "TR": "Kullanıcı kayıt edilemedi",
+        "ENG": "User cannot registered!"
+    },
+    "REGISTER": {
+        "TR": "Kayıt ol",
+        "ENG": "Register"
+    },
+    "NAME": {
+        "TR": "İsim",
+        "ENG": "Name"
+    },
+    "SURNAME": {
+        "TR": "Soyisim",
+        "ENG": "Surname"
+    },
+    "EMAIL": {
+        "TR": "E-posta",
+        "ENG": "E-mail"
+    },
+    "PASS": {
+        "TR": "Şifre",
+        "ENG": "Password"
+    },
+    "PASSWORDS": {
+        "TR": "Şifreler",
+        "ENG": "Passwords"
+    },
+    "NOTES": {
+        "TR": "Notlar",
+        "ENG": "Notes"
+    },
+    "TOOLS": {
+        "TR": "Araçlar",
+        "ENG": "Tools"
+    },
+    "PASS_AGAIN": {
+        "TR": "Şifre tekrar",
+        "ENG": "Password again"
+    },
+    "LOGIN_ERR": {
+        "TR": "Giriş yapılamadı! Kullanıcı bilgilerinizi kontrol ediniz.",
+        "ENG": "Could not login! Please check your creadentails."
+    },
+    "ERR_OCCURED": {
+        "TR": "Hata oluştu",
+        "ENG": "An error occurred"
+    },
+    "PUBLISHED": {
+        "TR": "Yayında",
+        "ENG": "Published"
+    },
+    "PUBLISH": {
+        "TR": "Yayınla",
+        "ENG": "Publish"
+    },
+    "DRAFT": {
+        "TR": "Tasklak",
+        "ENG": "Draft"
+    },
+    "STATUS": {
+        "TR": "Durum",
+        "ENG": "Status"
+    },
+    "SAVED": {
+        "TR": "Kayıt edildi",
+        "ENG": "Saved"
+    },
+    "SAVE": {
+        "TR": "Kaydet",
+        "ENG": "Save"
+    },
+    "CANCEL": {
+        "TR": "İptal",
+        "ENG": "Cancel"
+    },
+    "PIC": {
+        "TR": "Fotoğraf",
+        "ENG": "Picture"
+    },
+    "BACKGROUND": {
+        "TR": "Arka plan",
+        "ENG": "Background"
+    },
+    "CLOSE": {
+        "TR": "Kapat",
+        "ENG": "Close"
+    },
+    "USER_LIST": {
+        "TR": "Kullanıcı listesi",
+        "ENG": "User list"
+    },
+    "IS_ACTIVE": {
+        "TR": "Aktif mi?",
+        "ENG": "Is active?"
+    },
+    "MODEL_ERR": {
+        "TR": "Model hatası",
+        "ENG": "Model error"
+    },
+    "SELECT_USER": {
+        "TR": "Kullanıcı seçiniz",
+        "ENG": "Select user"
+    },
+    "AMOUNT": {
+        "TR": "Miktar",
+        "ENG": "Amount"
+    },
+    "LOAD": {
+        "TR": "Yükle",
+        "ENG": "Load"
+    },
+    "USER": {
+        "TR": "Kullanıcı",
+        "ENG": "User"
+    },
+    "TOTAL_USERS": {
+        "TR": "Tüm kullanıcılar",
+        "ENG": "Total users"
+    },
+    "EDIT": {
+        "TR": "Düzenle",
+        "ENG": "Edit"
+    },
+    "PROFILE": {
+        "TR": "Profil",
+        "ENG": "Profile"
+    },
+    "TITLE": {
+        "TR": "Başlık",
+        "ENG": "Title"
+    },
+    "USERNAME": {
+        "TR": "Kullanıcı adı",
+        "ENG": "Username"
+    },
+    "DETAIL": {
+        "TR": "Detay",
+        "ENG": "Detail"
+    },
+    "MASTER_KEY": {
+        "TR": "Master anahtar",
+        "ENG": "Master key"
+    },
+    "COPIED": {
+        "TR": "Kopyalandı",
+        "ENG": "Copied"
+    },
+    "PASS_IS_EMPTY": {
+        "TR": "Şifre boş",
+        "ENG": "Password is empty"
+    },
+    "MASTER_KEY_IS_EMPTY": {
+        "TR": "Master anahtar boş",
+        "ENG": "Master key is empty"
+    }
+}

@@ -33,6 +33,17 @@ services:
      - the-host-br-network
    container_name: the-host-vue-js-container
 
+  web-react:
+   image: tugkanmeral/the-host-web-react:latest
+   build: 
+     context: ./src/Web/the-host-react-js
+     dockerfile: Dockerfile
+   ports: 
+     - 8002:80
+   networks:
+     - the-host-br-network
+   container_name: the-host-react-js-container
+
   auth:
     image: tugkanmeral/the-host-auth
     build: 
