@@ -1,7 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function Paging(props) {
-    const [activePage, setActivePage] = useState(props.activePage);
     const [prevButtonVisible, setPrevButtonVisibility] = useState(false);
     const [nextButtonVisible, setNextButtonVisibility] = useState(true);
 
@@ -11,14 +10,26 @@ function Paging(props) {
         if (index > 2)
             break
     }
-
     const [visiblePages, setVisiblePages] = useState(tempVisiblePage);
 
+    useEffect(() => {
+        refreshPagination();
+    }, [props.pageCount])
+
+    function refreshPagination() {
+        tempVisiblePage = []
+        for (let index = 0; index < props.pageCount; index++) {
+            tempVisiblePage.push(index + 1)
+            if (index > 2)
+                break
+        }
+        setVisiblePages(tempVisiblePage)
+    }
+
     function changePage(_page) {
-        if (_page == activePage)
+        if (_page == props.activePage)
             return
-            
-        setActivePage(_page)
+
         props.onClick(_page)
 
         setDirectionButtonVisibility(_page);
@@ -41,24 +52,24 @@ function Paging(props) {
     }
 
     function nextPage() {
-        let any = visiblePages.some(x => x == (activePage + 1))
-        console.log(any)
+        let any = visiblePages.some(x => x == (props.activePage + 1))
+
         if (any)
-            changePage(activePage + 1)
+            changePage(props.activePage + 1)
     }
 
     function previousPage() {
-        if (activePage <= 1)
+        if (props.activePage <= 1)
             return
 
-        changePage(activePage - 1)
+        changePage(props.activePage - 1)
     }
 
     function GetVisiblePages() {
         const pages = visiblePages.map((visiblePage, index) =>
             <li
                 key={index}
-                className={activePage === visiblePage ? 'page-item active' : 'page-item'}
+                className={props.activePage === visiblePage ? 'page-item active' : 'page-item'}
             >
                 <button className="page-link" onClick={() => changePage(visiblePage)}>{visiblePage}</button>
             </li>

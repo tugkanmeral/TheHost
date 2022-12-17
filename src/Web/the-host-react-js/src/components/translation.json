@@ -222,5 +222,29 @@
     "MASTER_KEY_IS_EMPTY": {
         "TR": "Master anahtar boş",
         "ENG": "Master key is empty"
+    },
+    "NEW_PASS": {
+        "TR": "Yeni Şifre",
+        "ENG": "New Password"
+    },
+    "DELETE": {
+        "TR": "Sil",
+        "ENG": "Delete"
+    },
+    "PASSWORD_DELETED": {
+        "TR": "Şifre silindi",
+        "ENG": "Password deleted"
+    },
+    "MASTER_KEY_CANNOT_BE_EMPTY": {
+        "TR": "Master anahtar boş olamaz",
+        "ENG": "Master key cannot be empty"
+    },
+    "NOTE": {
+        "TR": "Not",
+        "ENG": "Note"
+    },
+    "TAGS": {
+        "TR": "Etiketler",
+        "ENG": "Tags"
     }
 }

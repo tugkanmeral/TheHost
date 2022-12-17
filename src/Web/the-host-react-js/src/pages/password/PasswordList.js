@@ -1,9 +1,9 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import Translation from '../../components/Translation'
 import { GET_PASSWORDS_URL, GET_PASSWORD_URL } from '../../data/routes';
 import Skeleton from '../../components/Skeleton'
-import { FaCopy } from 'react-icons/fa'
+import { FaUndo, FaCopy, FaEdit } from 'react-icons/fa'
 import { aesGcmDecrypt } from "../../helpers/crypto";
 import { toast } from 'react-toastify';
 import Paging from "../../components/Paging";
@@ -40,6 +40,7 @@ function PasswordList(props) {
 
             let pagesCount = data.totalItemCount % data.take == 0 ? (data.totalItemCount / data.take) : (parseInt(data.totalItemCount / data.take) + 1)
             setPageCount(pagesCount)
+            setActivePage(_page)
         }).catch((err) => {
             console.error(err);
         })
@@ -70,11 +71,12 @@ function PasswordList(props) {
                 return
             }
 
-            var password = await aesGcmDecrypt(data.pass, masterKey)
+            let password = await aesGcmDecrypt(data.pass, masterKey)
             navigator.clipboard.writeText(password);
             toast.success(<Translation msg="COPIED" />)
         }).catch((err) => {
             console.error(err);
+            toast.error(<Translation msg="ERR_OCCURED" />)
         })
     }
 
@@ -89,11 +91,12 @@ function PasswordList(props) {
                 <td>{password.username}</td>
                 <td>{password.detail}</td>
                 <td>
-                    <FaCopy style={{ cursor: 'pointer' }} onClick={() => copyPassword(password.id)} />
+                    {masterKey ? <FaEdit style={{ cursor: 'pointer' }} onClick={() => selectPassword(password.id)} /> : null}
+                    {masterKey ? <FaCopy style={{ cursor: 'pointer' }} onClick={() => copyPassword(password.id)} /> : null}
                 </td>
             </tr>
         );
-        
+
         return listItems;
     }
 
@@ -102,8 +105,16 @@ function PasswordList(props) {
         getPasswords(_page)
     }
 
+    function selectPassword(_id) {
+        props.onClick(_id)
+    }
+
+    function refreshList() {
+        getPasswords(1)
+    }
+
     return (
-        <div className='card p-3' style={{ width: '100%' }}>
+        <div className='card p-3 mb-2' style={{ width: '100%' }}>
             {
                 passwords ?
                     <>
@@ -114,7 +125,7 @@ function PasswordList(props) {
                                     <th scope="col"><Translation msg="TITLE" /></th>
                                     <th scope="col"><Translation msg="USERNAME" /></th>
                                     <th scope="col"><Translation msg="DETAIL" /></th>
-                                    <th scope="col">
+                                    <th scope="col"><FaUndo style={{ cursor: 'pointer' }} onClick={refreshList} />
                                     </th>
                                 </tr>
                             </thead>
@@ -126,7 +137,6 @@ function PasswordList(props) {
                     </> :
                     <Skeleton />
             }
-
         </div>
     )
 }
