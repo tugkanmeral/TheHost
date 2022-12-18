@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { getTokenObj } from '../../helpers';
 
 export const userReducer = createSlice({
     name: 'user',

@@ -235,6 +235,10 @@
         "TR": "Şifre silindi",
         "ENG": "Password deleted"
     },
+    "NOTE_DELETED": {
+        "TR": "Not silindi",
+        "ENG": "Note deleted"
+    },
     "MASTER_KEY_CANNOT_BE_EMPTY": {
         "TR": "Master anahtar boş olamaz",
         "ENG": "Master key cannot be empty"
@@ -246,5 +250,9 @@
     "TAGS": {
         "TR": "Etiketler",
         "ENG": "Tags"
+    },
+    "NOTE_VALIDATION_MSG": {
+        "TR": "Başlık alanı boş olamaz.",
+        "ENG": "Title cannot be empty."
     }
 }

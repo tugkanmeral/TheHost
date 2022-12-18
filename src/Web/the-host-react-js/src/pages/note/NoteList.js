@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { FaEdit, FaUndo } from "react-icons/fa";
+import { FaEdit, FaPlus, FaUndo } from "react-icons/fa";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import Paging from "../../components/Paging";
 import Skeleton from "../../components/Skeleton";
 import Translation from "../../components/Translation";
@@ -22,6 +23,8 @@ function NoteList(props) {
     useEffect(() => {
         getNotes(1)
     }, [filters])
+
+    const navigate = useNavigate()
 
     function getNotes(_page) {
         let url = GET_NOTES_URL + '?take=' + TAKE + '&skip='
@@ -62,8 +65,12 @@ function NoteList(props) {
         getNotes(1)
     }
 
+    function newNote(){
+        navigate('/note/detail')
+    }
+
     function selectNote(_id) {
-        props.onClick(_id)
+        navigate('/note/detail/' + _id)
     }
 
     function filterBy(_filter) {
@@ -145,7 +152,6 @@ function NoteList(props) {
             <tr key={index}>
                 <th scope="row">{(activePage - 1) * TAKE + index + 1}</th>
                 <td>{note.title}</td>
-                <td>{note.text.length > 35 ? note.text.slice(0, 35) + '...' : note.text}</td>
                 <td>{note.tagButtons.length > 0 ? note.tagButtons : '-'}</td>
                 <td>
                     <FaEdit style={{ cursor: 'pointer' }} onClick={() => selectNote(note.id)} />
@@ -158,16 +164,14 @@ function NoteList(props) {
 
     return (
         <div className='card p-3 mb-2' style={{ width: '100%' }}>
-   
             {
                 notes ?
                     <>
                         <table className="table table-sm">
                             <thead>
                                 <tr>
-                                    <th scope="col">#</th>
+                                    <th scope="col"><FaPlus style={{ cursor: 'pointer' }} onClick={newNote} /></th>
                                     <th scope="col"><Translation msg="TITLE" /></th>
-                                    <th scope="col"><Translation msg="NOTE" /></th>
                                     <th scope="col">
                                         <Translation msg="TAGS" />
                                         <ShowFilters />
@@ -181,7 +185,6 @@ function NoteList(props) {
                             </tbody>
                         </table>
                         <Paging activePage={activePage} pageCount={pageCount} onClick={(page) => pageChanged(page)} />
-
                     </> :
                     <Skeleton />
             }

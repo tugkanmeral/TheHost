@@ -16,6 +16,7 @@ import Tool from './pages/tool/Tool';
 import Password from './pages/password/Password';
 import Note from './pages/note/Note';
 import Profile from './pages/profile/Profile';
+import NoteDetail from './pages/note/NoteDetial';
 
 function App() {
   return (
@@ -29,6 +30,8 @@ function App() {
           <Route path="/tool" element={<Tool />} />
           <Route path="/password" element={<Password />} />
           <Route path="/note" element={<Note />} />
+          <Route exect path="/note/detail" element={<NoteDetail />} />
+          <Route exect path="/note/detail/:id" element={<NoteDetail />} />
           <Route path="/profile" element={<Profile />} />
         </Routes>
         <ToastContainer

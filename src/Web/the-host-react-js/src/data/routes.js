@@ -10,6 +10,10 @@ export const PUT_PASSWORD_URL = "http://localhost:5002/api/passwords/"
 
 // Note
 export const GET_NOTES_URL = "http://localhost:5003/api/notes"
+export const GET_NOTE_URL = "http://localhost:5003/api/notes/"
+export const INSERT_NOTE_URL = "http://localhost:5003/api/notes"
+export const UPDATE_NOTE_URL = "http://localhost:5003/api/notes/" 
+export const DELETE_NOTE_URL = "http://localhost:5003/api/notes/" 
 
 export const USER_REGISTER_URL = ""
 
