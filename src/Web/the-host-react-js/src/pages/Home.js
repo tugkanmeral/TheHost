@@ -1,20 +1,27 @@
+import { FaKey, FaPen, FaTools } from 'react-icons/fa'
 import { useSelector } from 'react-redux'
-import Translation from './../components/Translation'
+import { useNavigate } from 'react-router-dom'
 // import ReactCrop from 'react-image-crop/dist/ReactCrop.min.js'
 // import 'react-image-crop/dist/ReactCrop.css'
 // import { useState } from 'react'
 
 function Home() {
     const isLoggedIn = useSelector((state) => state.auth.isLoggedIn)
-    const fullname = useSelector((state) => state.user.name + ' ' + state.user.surname)
 
+    const navigate = useNavigate();
     // const [crop, setCrop] = useState();
     // const [src, setSrc] = useState();
 
     return (
-        <div className="container-lg d-flex flex-column pt-2">
+        <div className="container-lg d-flex flex-column pt-2 justify-content-center" style={{ height: '100vh' }}>
             {
-                isLoggedIn ? <Translation msg="WELCOME" /> + ", " + fullname : null
+                isLoggedIn ?
+                    <div className='d-inline-flex justify-content-around'>
+                        <FaKey size={55} color='rgb(75,75,75)' onClick={() => navigate('/password')} style={{ cursor: 'pointer' }} />
+                        <FaPen size={55} color='rgb(75,75,75)' onClick={() => navigate('/note')} style={{ cursor: 'pointer' }} />
+                        <FaTools size={55} color='rgb(75,75,75)' onClick={() => navigate('/tool')} style={{ cursor: 'pointer' }} />
+                    </div>
+                    : null
             }
 
             {/* <ReactCrop crop={crop} onChange={(c) => setCrop(c)}>

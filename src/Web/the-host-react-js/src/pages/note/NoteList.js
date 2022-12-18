@@ -19,10 +19,20 @@ function NoteList(props) {
         getNotes(1)
     }, [])
 
-    function getNotes(_page) {
-        let skip = (_page - 1) * TAKE
+    useEffect(() => {
+        getNotes(1)
+    }, [filters])
 
-        fetch(GET_NOTES_URL + '?take=' + TAKE + '&skip=' + skip, {
+    function getNotes(_page) {
+        let url = GET_NOTES_URL + '?take=' + TAKE + '&skip='
+        let skip = (_page - 1) * TAKE
+        url += skip
+
+        if (filters.length > 0) {
+            url += '&tags=' + filters.join('&tags=')
+        }
+
+        fetch(url, {
             method: 'GET',
             headers: {
                 'Authorization': 'Bearer ' + token
@@ -36,7 +46,7 @@ function NoteList(props) {
             const data = await response.json();
             setNotes(data.items)
 
-            let pagesCount = data.totalItemCount % data.take == 0 ? (data.totalItemCount / data.take) : (parseInt(data.totalItemCount / data.take) + 1)
+            let pagesCount = data.totalItemCount % data.take === 0 ? (data.totalItemCount / data.take) : (parseInt(data.totalItemCount / data.take) + 1)
             setPageCount(pagesCount)
             setActivePage(_page)
         }).catch((err) => {
@@ -57,44 +67,14 @@ function NoteList(props) {
     }
 
     function filterBy(_filter) {
-        let filterList = filters
-        filterList.push(_filter)
-        setFilters([...new Set(filterList)])
-    }
-
-    function NoteRows() {
-        if (!notes)
-            return;
-
-        for (let index = 0; index < notes.length; index++) {
-            notes[index].tagButtons = []
-            if (notes[index].tags.length > 0) {
-                for (let ind = 0; ind < notes[index].tags.length; ind++) {
-                    let filter = notes[index].tags[ind]
-                    notes[index].tagButtons.push(<button
-                        key={index + '' + ind}
-                        className={filters.includes(notes[index].tags[ind]) ? "btn btn-sm btn-warning mx-1" :  "btn btn-sm btn-secondary mx-1"}
-                        onClick={() => filterBy(filter)}>
-                        {'#' + notes[index].tags[ind]}
-                    </button>)
-
-                }
-            }
+        if (filters.includes(_filter)) {
+            removeFilter(_filter)
         }
-
-        const listItems = notes.map((note, index) =>
-            <tr key={index}>
-                <th scope="row">{(activePage - 1) * TAKE + index + 1}</th>
-                <td>{note.title}</td>
-                <td>{note.text.length > 35 ? note.text.slice(0, 35) + '...' : note.text}</td>
-                <td>{note.tagButtons.length > 0 ? note.tagButtons : '-'}</td>
-                <td>
-                    <FaEdit style={{ cursor: 'pointer' }} onClick={() => selectNote(note.id)} />
-                </td>
-            </tr>
-        );
-
-        return listItems;
+        else {
+            let filterList = filters
+            filterList.push(_filter)
+            setFilters([...new Set(filterList)])
+        }
     }
 
     function removeFilter(_filter) {
@@ -141,8 +121,44 @@ function NoteList(props) {
         )
     }
 
+    function NoteRows() {
+        if (!notes)
+            return;
+
+        for (let index = 0; index < notes.length; index++) {
+            notes[index].tagButtons = []
+            if (notes[index].tags.length > 0) {
+                for (let ind = 0; ind < notes[index].tags.length; ind++) {
+                    let filter = notes[index].tags[ind]
+                    notes[index].tagButtons.push(<button
+                        key={index + '' + ind}
+                        className={filters.includes(notes[index].tags[ind]) ? "btn btn-sm btn-warning mx-1" : "btn btn-sm btn-secondary mx-1"}
+                        onClick={() => filterBy(filter)}>
+                        {'#' + notes[index].tags[ind]}
+                    </button>)
+
+                }
+            }
+        }
+
+        const listItems = notes.map((note, index) =>
+            <tr key={index}>
+                <th scope="row">{(activePage - 1) * TAKE + index + 1}</th>
+                <td>{note.title}</td>
+                <td>{note.text.length > 35 ? note.text.slice(0, 35) + '...' : note.text}</td>
+                <td>{note.tagButtons.length > 0 ? note.tagButtons : '-'}</td>
+                <td>
+                    <FaEdit style={{ cursor: 'pointer' }} onClick={() => selectNote(note.id)} />
+                </td>
+            </tr>
+        );
+
+        return listItems;
+    }
+
     return (
         <div className='card p-3 mb-2' style={{ width: '100%' }}>
+   
             {
                 notes ?
                     <>
