@@ -11,27 +11,27 @@ services:
       - the-host-br-network
     container_name: the-host-gateway-ocelot-container
 
-  web:
-   image: tugkanmeral/the-host-web:latest
-   build: 
-     context: ./src/Web/the-host-blazor-wasm
-     dockerfile: Dockerfile
-   ports: 
-     - 8000:80
-   networks:
-     - the-host-br-network
-   container_name: the-host-blazor-wasm-container
+  # web:
+  #  image: tugkanmeral/the-host-web:latest
+  #  build: 
+  #    context: ./src/Web/the-host-blazor-wasm
+  #    dockerfile: Dockerfile
+  #  ports: 
+  #    - 8000:80
+  #  networks:
+  #    - the-host-br-network
+  #  container_name: the-host-blazor-wasm-container
 
-  web-vue:
-   image: tugkanmeral/the-host-web-vue:latest
-   build: 
-     context: ./src/Web/the-host-vue-js
-     dockerfile: Dockerfile
-   ports: 
-     - 8001:80
-   networks:
-     - the-host-br-network
-   container_name: the-host-vue-js-container
+  # web-vue:
+  #  image: tugkanmeral/the-host-web-vue:latest
+  #  build: 
+  #    context: ./src/Web/the-host-vue-js
+  #    dockerfile: Dockerfile
+  #  ports: 
+  #    - 8001:80
+  #  networks:
+  #    - the-host-br-network
+  #  container_name: the-host-vue-js-container
 
   web-react:
    image: tugkanmeral/the-host-web-react:latest

@@ -8,47 +8,24 @@ import { USER_REGISTER_URL } from "../data/routes";
 function Register() {
 
     const [registerModel, setRegisterModel] = useState({
-        name: '',
-        surname: '',
-        email: '',
+        username: '',
         password: '',
         passwordAgain: ''
     });
 
-    const [onRegisterRequest, setOnRegisterRequest] = useState(false);
-
     let navigate = useNavigate();
 
-    function handleNameChange(event) {
+    const [onRegisterRequest, setOnRegisterRequest] = useState(false);
+
+    function handleUsernameChange(event) {
         let updatedValue = {}
-        updatedValue = { name: event.target.value }
+        updatedValue = { username: event.target.value }
 
         setRegisterModel(registerModel => ({
             ...registerModel,
             ...updatedValue
         }))
     }
-
-    function handleSurnameChange(event) {
-        let updatedValue = {}
-        updatedValue = { surname: event.target.value }
-
-        setRegisterModel(registerModel => ({
-            ...registerModel,
-            ...updatedValue
-        }))
-    }
-
-    function handleEmailChange(event) {
-        let updatedValue = {}
-        updatedValue = { email: event.target.value }
-
-        setRegisterModel(registerModel => ({
-            ...registerModel,
-            ...updatedValue
-        }))
-    }
-
     function handlePasswordChange(event) {
         let updatedValue = {}
         updatedValue = { password: event.target.value }
@@ -75,18 +52,8 @@ function Register() {
             return false;
         }
 
-        if (!registerModel.name || registerModel.name === '') {
-            toast.warning(<Translation msg="NAME_CANNOT_EMPTY" />);
-            return false;
-        }
-
-        if (!registerModel.surname || registerModel.surname === '') {
-            toast.warning(<Translation msg="SURNAME_CANNOT_EMPTY" />);
-            return false;
-        }
-
-        if (!registerModel.email || registerModel.email === '') {
-            toast.warning(<Translation msg="EMAIL_CANNOT_EMPTY" />);
+        if (!registerModel.username || registerModel.username === '') {
+            toast.warning(<Translation msg="USERNAME_CANNOT_EMPTY" />);
             return false;
         }
 
@@ -139,13 +106,9 @@ function Register() {
         <div className="container-lg d-flex justify-content-center align-items-center" style={{ flex: 1 }}>
             <div className="card w-100" style={{ width: "18rem" }}>
                 <div className="card-body">
-                    <h5 className="card-title text-center"><Translation msg="TOMBSTONE_QR" /></h5>
-                    <label><Translation msg="NAME" /></label>
-                    <input type="text" className="form-control mb-2" value={registerModel.name} onChange={handleNameChange} ></input>
-                    <label><Translation msg="SURNAME" /></label>
-                    <input type="text" className="form-control mb-2" value={registerModel.surname} onChange={handleSurnameChange} ></input>
-                    <label><Translation msg="EMAIL" /></label>
-                    <input type="email" className="form-control mb-2" value={registerModel.email} onChange={handleEmailChange} ></input>
+                    <h5 className="card-title text-center"><Translation msg="APP_NAME" /></h5>
+                    <label><Translation msg="USERNAME" /></label>
+                    <input type="text" className="form-control mb-2" value={registerModel.username} onChange={handleUsernameChange} ></input>
                     <label><Translation msg="PASS" /></label>
                     <input type="password" className="form-control mb-2" value={registerModel.password} onChange={handlePasswordChange} ></input>
                     <label><Translation msg="PASS_AGAIN" /></label>

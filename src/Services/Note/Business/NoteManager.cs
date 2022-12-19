@@ -58,7 +58,13 @@ public class NoteManager : INoteService
 
         existNote.Text = note.Text;
         existNote.Title = note.Title;
-        existNote.Tags = note.Tags;
+
+        var tagList = note.Tags.ToList();
+        for (int i = 0; i < tagList.Count; i++)
+        {
+            tagList[i] = tagList[i].Trim();
+        }
+        existNote.Tags = tagList;
 
         existNote.LastUpdateDate = DateTime.Now;
 

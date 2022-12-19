@@ -15,6 +15,7 @@ export const INSERT_NOTE_URL = "http://localhost:5003/api/notes"
 export const UPDATE_NOTE_URL = "http://localhost:5003/api/notes/" 
 export const DELETE_NOTE_URL = "http://localhost:5003/api/notes/" 
 
-export const USER_REGISTER_URL = ""
+// User
+export const USER_REGISTER_URL = "http://localhost:5004/api/user"
 
 

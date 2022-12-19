@@ -27,6 +27,11 @@ public class UserManager : IUserService
 
     public void InsertUser(User user)
     {
+        var existUser = _userRepository.GetByUsername(user.Username);
+        if (existUser != null){
+            throw new System.Exception("Username is reserved!");
+        }
+
         StringBuilder rawPassStrBuilder = new();
         rawPassStrBuilder.Append(user.Username);
         rawPassStrBuilder.Append(user.Password);

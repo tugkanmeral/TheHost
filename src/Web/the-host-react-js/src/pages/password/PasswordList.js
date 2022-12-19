@@ -86,11 +86,11 @@ function PasswordList(props) {
 
         const listItems = passwords.map((password, index) =>
             <tr key={index}>
-                <th scope="row">{(activePage - 1) * TAKE + index + 1}</th>
-                <td>{password.title}</td>
-                <td>{password.username}</td>
-                <td>{password.detail}</td>
-                <td>
+                <th scope="row" className="col-1">{(activePage - 1) * TAKE + index + 1}</th>
+                <td className="col-3">{password.title}</td>
+                <td className="col-3">{password.username}</td>
+                <td className="col-3">{password.detail}</td>
+                <td className="col-2">
                     {masterKey ? <FaEdit style={{ cursor: 'pointer' }} onClick={() => selectPassword(password.id)} /> : null}
                     {masterKey ? <FaCopy style={{ cursor: 'pointer' }} onClick={() => copyPassword(password.id)} /> : null}
                 </td>
@@ -121,11 +121,11 @@ function PasswordList(props) {
                         <table className="table table-sm">
                             <thead>
                                 <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col"><Translation msg="TITLE" /></th>
-                                    <th scope="col"><Translation msg="USERNAME" /></th>
-                                    <th scope="col"><Translation msg="DETAIL" /></th>
-                                    <th scope="col"><FaUndo style={{ cursor: 'pointer' }} onClick={refreshList} />
+                                    <th scope="col" className="col-1">#</th>
+                                    <th scope="col" className="col-3"><Translation msg="TITLE" /></th>
+                                    <th scope="col" className="col-3"><Translation msg="USERNAME" /></th>
+                                    <th scope="col" className="col-3"><Translation msg="DETAIL" /></th>
+                                    <th scope="col" className="col-2"><FaUndo style={{ cursor: 'pointer' }} onClick={refreshList} />
                                     </th>
                                 </tr>
                             </thead>

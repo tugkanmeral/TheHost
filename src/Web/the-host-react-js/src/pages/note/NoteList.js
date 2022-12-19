@@ -58,7 +58,8 @@ function NoteList(props) {
     }
 
     function pageChanged(_page) {
-
+        setActivePage(_page)
+        getNotes(_page)
     }
 
     function refreshList() {
@@ -150,10 +151,10 @@ function NoteList(props) {
 
         const listItems = notes.map((note, index) =>
             <tr key={index}>
-                <th scope="row">{(activePage - 1) * TAKE + index + 1}</th>
-                <td>{note.title}</td>
-                <td>{note.tagButtons.length > 0 ? note.tagButtons : '-'}</td>
-                <td>
+                <th scope="row" className="col-1">{(activePage - 1) * TAKE + index + 1}</th>
+                <td className="col-5">{note.title}</td>
+                <td className="col-5">{note.tagButtons.length > 0 ? note.tagButtons : '-'}</td>
+                <td className="col-1">
                     <FaEdit style={{ cursor: 'pointer' }} onClick={() => selectNote(note.id)} />
                 </td>
             </tr>
@@ -170,13 +171,13 @@ function NoteList(props) {
                         <table className="table table-sm">
                             <thead>
                                 <tr>
-                                    <th scope="col"><FaPlus style={{ cursor: 'pointer' }} onClick={newNote} /></th>
-                                    <th scope="col"><Translation msg="TITLE" /></th>
-                                    <th scope="col">
+                                    <th scope="col" className="col-1"><FaPlus style={{ cursor: 'pointer' }} onClick={newNote} /></th>
+                                    <th scope="col" className="col-5"><Translation msg="TITLE" /></th>
+                                    <th scope="col" className="col-5">
                                         <Translation msg="TAGS" />
                                         <ShowFilters />
                                     </th>
-                                    <th scope="col"><FaUndo style={{ cursor: 'pointer' }} onClick={refreshList} />
+                                    <th scope="col" className="col-1"><FaUndo style={{ cursor: 'pointer' }} onClick={refreshList} />
                                     </th>
                                 </tr>
                             </thead>

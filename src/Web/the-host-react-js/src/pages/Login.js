@@ -74,7 +74,7 @@ function Login() {
             <div className="card w-100" style={{ width: "18rem" }}>
                 <div className="card-body">
                     <h5 className="card-title text-center"><Translation msg="APP_NAME" /></h5>
-                    <label><Translation msg="EMAIL" /></label>
+                    <label><Translation msg="USERNAME" /></label>
                     <input type="text" className="form-control mb-2" value={username} onChange={handleUsernameChange} ></input>
                     <label><Translation msg="PASS" /></label>
                     <input type="password" className="form-control mb-2" value={password} onChange={handlePasswordChange} ></input>
@@ -87,5 +87,3 @@ function Login() {
 }
 
 export default Login;
-
-

@@ -39,6 +39,10 @@
         "TR": "Kayıt esnasında hata oluştu",
         "ENG": "Error while register"
     },
+    "USERNAME_CANNOT_EMPTY": {
+        "TR": "Kullanıcı adı alanı boş olamaz",
+        "ENG": "Username cannot be empty"
+    },
     "NAME_CANNOT_EMPTY": {
         "TR": "İsim alanı boş olamaz",
         "ENG": "Name cannot be empty"
