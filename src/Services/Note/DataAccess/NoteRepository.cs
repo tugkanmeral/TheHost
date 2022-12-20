@@ -57,7 +57,7 @@ public class NoteRepository : INoteRepository, IMongoDbRepository<En.Note>
         var projection = new BsonDocument("$project", new BsonDocument()
         {
             {"Title", 1},
-            {"Text", new BsonDocument("$substrBytes", new BsonArray(new BsonValue[]{"$Text", 0, 100}))},
+            //{"Text", new BsonDocument("$substrBytes", new BsonArray(new BsonValue[]{"$Text", 0, 100}))},
             {"Tags", 1},
             {"CreationDate", 1}
         });
