@@ -139,7 +139,6 @@ function NoteDetail() {
             }
 
             toast.success(<Translation msg="SAVED" />)
-            navigate('/note')
         }).catch((err) => {
             console.error(err);
         })

@@ -183,9 +183,9 @@ function PasswordDetail(props) {
             <div className="card-body">
                 <h5 className="card-title text-center">{password?.title ? password.title : <Translation msg="NEW_PASS" />}</h5>
                 <label><Translation msg="TITLE" /></label>
-                <input type="text" className="form-control mb-2" value={password?.title} onChange={handleTitleChange} ></input>
+                <input type="text" className="form-control mb-2" value={password?.title} onChange={handleTitleChange} disabled={password.id}></input>
                 <label><Translation msg="USERNAME" /></label>
-                <input type="text" className="form-control mb-2" value={password?.username} onChange={handleUsernameChange} ></input>
+                <input type="text" className="form-control mb-2" value={password?.username} onChange={handleUsernameChange} disabled={password.id}></input>
                 <label><Translation msg="DETAIL" /></label>
                 <input type="text" className="form-control mb-2" value={password?.detail} onChange={handleDetailChange} ></input>
                 <label><Translation msg="PASS" /></label>
