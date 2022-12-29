@@ -3,10 +3,10 @@ import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom'
 import { DELETE_NOTE_URL, GET_NOTE_URL, INSERT_NOTE_URL, UPDATE_NOTE_URL } from '../../data/routes';
 
-import { EditorState, ContentState } from 'draft-js';
+import { EditorState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import { convertToHTML } from 'draft-convert';
-import htmlToDraft from 'html-to-draftjs';
+import { convertFromHTML } from 'draft-convert'
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import Translation from '../../components/Translation';
 import RequestButton from '../../components/RequestButton';
@@ -14,6 +14,18 @@ import { toast } from 'react-toastify';
 
 function NoteDetail() {
     const token = useSelector((state) => state.auth.token)
+
+    const opts = {
+        styleToHTML: (style) => {
+            if (style === 'STRIKETHROUGH') {
+                return {
+                    start: '<s>',
+                    end: '</s>'
+                };
+            }
+        }
+    }
+    const toHTML = convertToHTML(opts);
 
     let { id } = useParams();
 
@@ -36,7 +48,7 @@ function NoteDetail() {
     );
 
     const convertContentToHTML = () => {
-        let currentContentAsHTML = convertToHTML(editorState.getCurrentContent());
+        let currentContentAsHTML = toHTML(editorState.getCurrentContent());
 
         let updatedValue = {}
         updatedValue = { text: currentContentAsHTML }
@@ -89,12 +101,9 @@ function NoteDetail() {
 
             setNote(data)
 
-            const contentBlock = htmlToDraft(data.text);
-            if (contentBlock) {
-                const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
-                const editorState = EditorState.createWithContent(contentState);
-                setEditorState(editorState)
-            }
+            const editorState = EditorState.createWithContent(convertFromHTML(data.text));
+            setEditorState(editorState)
+
         }).catch((err) => {
             console.error(err);
         })
@@ -188,7 +197,7 @@ function NoteDetail() {
                             toolbar={{
                                 options: ['inline', 'blockType', 'list', 'textAlign', 'history'],
                                 inline: {
-                                    options: ['bold', 'italic', 'strikethrough', 'underline']
+                                    options: ['bold', 'italic', 'strikethrough', 'underline', 'monospace']
                                 },
                                 blockType: {
                                     inDropdown: true
