@@ -47,12 +47,12 @@
       "dockerBuild": {
         "tag": "thehost:dev",
         "target": "base",
-        "dockerfile": "${workspaceFolder}/src/Services/Auth/Dockerfile",
+        "dockerfile": "${workspaceFolder}/src/Services/Note/Dockerfile",
         "context": "${workspaceFolder}",
         "pull": true
       },
       "netCore": {
-        "appProject": "${workspaceFolder}/src/Services/Auth/Auth.csproj"
+        "appProject": "${workspaceFolder}/src/Services/Note/Note.csproj"
       }
     },
     {
@@ -63,12 +63,12 @@
       ],
       "dockerBuild": {
         "tag": "thehost:latest",
-        "dockerfile": "${workspaceFolder}/src/Services/Auth/Dockerfile",
+        "dockerfile": "${workspaceFolder}/src/Services/Note/Dockerfile",
         "context": "${workspaceFolder}",
         "pull": true
       },
       "netCore": {
-        "appProject": "${workspaceFolder}/src/Services/Auth/Auth.csproj"
+        "appProject": "${workspaceFolder}/src/Services/Note/Note.csproj"
       }
     },
     {
@@ -79,7 +79,7 @@
       ],
       "dockerRun": {},
       "netCore": {
-        "appProject": "${workspaceFolder}/src/Services/Auth/Auth.csproj",
+        "appProject": "${workspaceFolder}/src/Services/Note/Note.csproj",
         "enableDebugging": true
       }
     },
@@ -91,7 +91,7 @@
       ],
       "dockerRun": {},
       "netCore": {
-        "appProject": "${workspaceFolder}/src/Services/Auth/Auth.csproj"
+        "appProject": "${workspaceFolder}/src/Services/Note/Note.csproj"
       }
     }
   ]
