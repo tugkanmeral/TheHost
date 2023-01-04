@@ -112,6 +112,15 @@ services:
       - the-host-br-network
     container_name: the-host-tool-container
 
+  monitoring:
+    image: tugkanmeral/the-host-monitoring
+    build: 
+      context: ./src/Services/Monitoring
+      dockerfile: Dockerfile
+    networks:
+      - the-host-br-network
+    container_name: the-host-monitoring-container
+
   mongo:
     image: "mongo"
     ports: 
