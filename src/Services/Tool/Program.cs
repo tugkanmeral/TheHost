@@ -13,6 +13,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddHealthChecks();
+
 var allowedHosts = builder.Configuration.GetSection("AllowedHosts").Value.Trim().Split(",");
 builder.Services.AddCors(options =>
 {
@@ -60,6 +62,7 @@ app.UseCors(policyName);
 
 app.UseAuthorization();
 
+app.MapHealthChecks("/healthCheck");
 app.MapControllers();
 
 app.Run();

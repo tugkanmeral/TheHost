@@ -11,6 +11,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddHealthChecks();
+
 builder.Services.AddSingleton(s =>
 {
     AppSettings appSettings = new();
@@ -57,6 +59,7 @@ app.UseCors(policyName);
 
 app.UseAuthorization();
 
+app.MapHealthChecks("/healthCheck");
 app.MapControllers();
 
 app.Run();
