@@ -105,7 +105,7 @@ function NoteList(props) {
             return (
                 <span
                     style={{ cursor: 'pointer' }}
-                    className="badge bg-warning text-dark mx-2"
+                    className="badge bg-warning text-dark mx-2 my-1"
                     onClick={() => removeFilters()}
                 >
                     {filters.length}
@@ -117,7 +117,7 @@ function NoteList(props) {
             <span
                 style={{ cursor: 'pointer' }}
                 key={index}
-                className="badge bg-warning text-dark mx-1"
+                className="badge bg-warning text-dark mx-1 my-1"
                 onClick={() => removeFilter(filter)}
             >
                 {filter}
@@ -140,7 +140,7 @@ function NoteList(props) {
                     let filter = notes[index].tags[ind]
                     notes[index].tagButtons.push(<button
                         key={index + '' + ind}
-                        className={filters.includes(notes[index].tags[ind]) ? "btn btn-sm btn-warning mx-1" : "btn btn-sm btn-secondary mx-1"}
+                        className={filters.includes(notes[index].tags[ind]) ? "btn btn-sm btn-warning mx-1 my-1" : "btn btn-sm btn-secondary mx-1 my-1"}
                         onClick={() => filterBy(filter)}>
                         {'#' + notes[index].tags[ind]}
                     </button>)
