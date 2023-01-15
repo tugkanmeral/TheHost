@@ -11,18 +11,20 @@ function NoteList(props) {
     const token = useSelector((state) => state.auth.token)
 
     const [filters, setFilters] = useState([])
+    const [searchText, setSearchText] = useState("")
     const [notes, setNotes] = useState([])
     const [activePage, setActivePage] = useState([])
     const [pageCount, setPageCount] = useState([])
+
     const TAKE = 10
 
     useEffect(() => {
         getNotes(1)
-    }, [])
+    }, [filters])
 
     useEffect(() => {
         getNotes(1)
-    }, [filters])
+    }, [searchText])
 
     const navigate = useNavigate()
 
@@ -33,6 +35,10 @@ function NoteList(props) {
 
         if (filters.length > 0) {
             url += '&tags=' + filters.join('&tags=')
+        }
+
+        if (searchText.length > 0) {
+            url += '&searchText=' + searchText
         }
 
         fetch(url, {
@@ -66,7 +72,7 @@ function NoteList(props) {
         getNotes(1)
     }
 
-    function newNote(){
+    function newNote() {
         navigate('/note/detail')
     }
 
@@ -83,6 +89,10 @@ function NoteList(props) {
             filterList.push(_filter)
             setFilters([...new Set(filterList)])
         }
+    }
+
+    function handleSearchTextChange(event) {
+        setSearchText(event.target.value)
     }
 
     function removeFilter(_filter) {
@@ -168,6 +178,20 @@ function NoteList(props) {
             {
                 notes ?
                     <>
+                        <div className="row align-items-center justify-content-center">
+                            <div className="col-sm-2">
+                                <Translation msg="TEXT_SEARCH" /> :
+                            </div>
+                            <div className="col-sm-10">
+                                <input
+                                    type="text"
+                                    className="form-control float-right"
+                                    value={searchText || ''}
+                                    onChange={handleSearchTextChange} >
+                                </input>
+                            </div>
+                        </div>
+                        <hr />
                         <table className="table table-sm">
                             <thead>
                                 <tr>

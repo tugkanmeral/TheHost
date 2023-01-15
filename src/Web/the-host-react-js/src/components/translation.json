@@ -258,5 +258,9 @@
     "NOTE_VALIDATION_MSG": {
         "TR": "Başlık alanı boş olamaz.",
         "ENG": "Title cannot be empty."
+    },
+    "TEXT_SEARCH": {
+        "TR": "Metin arama",
+        "ENG": "Text search"
     }
 }
