@@ -89,7 +89,6 @@ function PasswordList(props) {
                 <th scope="row" className="col-1">{(activePage - 1) * TAKE + index + 1}</th>
                 <td className="col-3">{password.title}</td>
                 <td className="col-3">{password.username}</td>
-                <td className="col-3">{password.detail}</td>
                 <td className="col-2">
                     {masterKey ? <FaEdit style={{ cursor: 'pointer' }} onClick={() => selectPassword(password.id)} /> : null}
                     {masterKey ? <FaCopy style={{ cursor: 'pointer' }} onClick={() => copyPassword(password.id)} /> : null}
@@ -124,7 +123,6 @@ function PasswordList(props) {
                                     <th scope="col" className="col-1">#</th>
                                     <th scope="col" className="col-3"><Translation msg="TITLE" /></th>
                                     <th scope="col" className="col-3"><Translation msg="USERNAME" /></th>
-                                    <th scope="col" className="col-3"><Translation msg="DETAIL" /></th>
                                     <th scope="col" className="col-2"><FaUndo style={{ cursor: 'pointer' }} onClick={refreshList} />
                                     </th>
                                 </tr>
