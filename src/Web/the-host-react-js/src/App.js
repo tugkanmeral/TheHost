@@ -17,6 +17,9 @@ import Password from './pages/password/Password';
 import Note from './pages/note/Note';
 import Profile from './pages/profile/Profile';
 import NoteDetail from './pages/note/NoteDetial';
+import Modal from 'react-modal';
+
+Modal.setAppElement('#root');
 
 function App() {
   return (

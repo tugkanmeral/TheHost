@@ -1,0 +1,20 @@
+.note-modal-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.note-modal-body {
+    flex: 1;
+}
+
+.note-modal-footer {
+    height: 40px;
+}
+
+.active>.page-link, .page-link.active {
+    z-index: 0 !important;
+    color: var(--bs-pagination-active-color);
+    background-color: var(--bs-pagination-active-bg);
+    border-color: var(--bs-pagination-active-border-color);
+}

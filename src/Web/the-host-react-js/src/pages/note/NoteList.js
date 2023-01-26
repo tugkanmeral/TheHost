@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { FaEdit, FaPlus, FaUndo } from "react-icons/fa";
+import { FaEdit, FaEye, FaPlus, FaTimes, FaUndo } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Paging from "../../components/Paging";
 import Skeleton from "../../components/Skeleton";
 import Translation from "../../components/Translation";
-import { GET_NOTES_URL } from "../../data/routes";
+import { GET_NOTES_URL, GET_NOTE_URL } from "../../data/routes";
+import NoteModal from "./NoteModal"
 
 function NoteList(props) {
     const token = useSelector((state) => state.auth.token)
@@ -15,6 +16,8 @@ function NoteList(props) {
     const [notes, setNotes] = useState([])
     const [activePage, setActivePage] = useState([])
     const [pageCount, setPageCount] = useState([])
+    const [previewNote, setPreviewNote] = useState({})
+    const [modalIsOpen, setModalIsOpen] = useState(false);
 
     const TAKE = 10
 
@@ -166,11 +169,38 @@ function NoteList(props) {
                 <td className="col-5">{note.tagButtons.length > 0 ? note.tagButtons : '-'}</td>
                 <td className="col-1">
                     <FaEdit style={{ cursor: 'pointer' }} onClick={() => selectNote(note.id)} />
+                    <FaEye style={{ cursor: 'pointer' }} onClick={() => openNoteModal(note.id)} />
                 </td>
             </tr>
         );
 
         return listItems;
+    }
+
+    function openNoteModal(_id) {
+        fetch(GET_NOTE_URL + _id, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        }).then(async (response) => {
+            if (!response.ok) {
+                console.error(response.status + ": " + response.statusText);
+                return;
+            }
+
+            const data = await response.json();
+
+            if (data && data.tags && data.tags.length > 0) {
+                data.tagsStr = '#' + data.tags.join(' #')
+            }
+
+            setPreviewNote(data)
+            setModalIsOpen(true);
+        }).catch((err) => {
+            console.error(err);
+        })
+
     }
 
     return (
@@ -213,6 +243,14 @@ function NoteList(props) {
                     </> :
                     <Skeleton />
             }
+
+            <NoteModal note={previewNote} isOpen={modalIsOpen} >
+                <div
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => setModalIsOpen(false)}>
+                    <FaTimes size='1.3em' />
+                </div>
+            </NoteModal>
         </div>
     )
 }
