@@ -168,8 +168,8 @@ function NoteList(props) {
                 <td className="col-5">{note.title}</td>
                 <td className="col-5">{note.tagButtons.length > 0 ? note.tagButtons : '-'}</td>
                 <td className="col-1">
-                    <FaEdit style={{ cursor: 'pointer' }} onClick={() => selectNote(note.id)} />
-                    <FaEye style={{ cursor: 'pointer' }} onClick={() => openNoteModal(note.id)} />
+                    <FaEdit style={{ cursor: 'pointer', marginRight: '15px' }} onClick={() => selectNote(note.id)} />
+                    <FaEye style={{ cursor: 'pointer', }} onClick={() => openNoteModal(note.id)} />
                 </td>
             </tr>
         );
