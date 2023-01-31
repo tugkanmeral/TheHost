@@ -11,7 +11,7 @@ public class NoteRepository : INoteRepository, IMongoDbRepository<En.Note>
     public NoteRepository(IMongoClient mongoClient)
     {
         Client = mongoClient;
-        Database = Client.GetDatabase("OnePassMini");
+        Database = Client.GetDatabase("TheHost");
         Collection = Database.GetCollection<En.Note>("Notes");
     }
 
