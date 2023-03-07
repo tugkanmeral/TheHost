@@ -44,6 +44,13 @@ public class PasswordRepository : IPasswordRepository, IMongoDbRepository<En.Pas
         return passwords;
     }
 
+    public async Task<List<En.Password>> GetAsync(string userId)
+    {
+        var filter = Builders<En.Password>.Filter.Eq(p => p.OwnerId, userId);
+        var passwords = await Collection.Find(filter).ToListAsync();
+        return passwords;
+    }
+
     public void Insert(En.Password password)
     {
         Collection.InsertOne(password);
