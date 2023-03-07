@@ -11,7 +11,7 @@ public class PasswordRepository : IPasswordRepository, IMongoDbRepository<En.Pas
     public PasswordRepository(IMongoClient mongoClient)
     {
         Client = mongoClient;
-        Database = Client.GetDatabase("OnePassMini");
+        Database = Client.GetDatabase("TheHost");
         Collection = Database.GetCollection<En.Password>("Passwords");
     }
 

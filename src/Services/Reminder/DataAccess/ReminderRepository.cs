@@ -9,7 +9,7 @@ public class ReminderRepository : IReminderRepository, IMongoDbRepository<En.Rem
     public ReminderRepository(IMongoClient mongoClient)
     {
         Client = mongoClient;
-        Database = Client.GetDatabase("OnePassMini");
+        Database = Client.GetDatabase("TheHost");
         Collection = Database.GetCollection<En.Reminder>("Reminders");
     }
 

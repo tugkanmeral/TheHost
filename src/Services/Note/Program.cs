@@ -26,6 +26,7 @@ builder.Services.AddSingleton(s =>
 });
 builder.Services.AddScoped<INoteRepository, NoteRepository>();
 builder.Services.AddScoped<INoteService, NoteManager>();
+builder.Services.AddScoped<IBackupService, BackupManager>();
 builder.Services.AddSingleton<IMongoClient, MongoClient>(s =>
 {
     var uri = s.GetRequiredService<IConfiguration>()["MongoUri"];

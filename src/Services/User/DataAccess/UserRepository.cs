@@ -7,7 +7,7 @@ public class UserRepository : IUserRepository, IMongoDbRepository<User>
     public UserRepository(IMongoClient mongoClient)
     {
         Client = mongoClient;
-        Database = Client.GetDatabase("OnePassMini");
+        Database = Client.GetDatabase("TheHost");
         Collection = Database.GetCollection<User>("Users");
     }
 

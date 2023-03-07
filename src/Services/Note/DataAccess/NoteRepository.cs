@@ -85,4 +85,16 @@ public class NoteRepository : INoteRepository, IMongoDbRepository<En.Note>
         var filter = Builders<En.Note>.Filter.Eq(p => p.Id, note.Id);
         Collection.ReplaceOne(filter, note);
     }
+
+    public async Task<IEnumerable<En.Note>> Get(string userId)
+    {
+        var filter = Builders<En.Note>.Filter.Eq(p => p.OwnerId, userId);
+        var notes = await Collection.Find(filter).ToListAsync();
+        return notes;
+    }
+
+    public async Task Insert(IEnumerable<En.Note> notes)
+    {
+        await Collection.InsertManyAsync(notes);
+    }
 }
