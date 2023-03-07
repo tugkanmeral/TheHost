@@ -121,15 +121,15 @@ services:
       - the-host-br-network
     container_name: the-host-monitoring-container
 
-  mongo:
-    image: "mongo"
-    ports: 
-      - 27017:27017
-    networks:
-      - the-host-br-network
-    container_name: the-host-mongo-container
-    volumes:
-      - './data:/data/db'
+  # mongo:
+  #   image: "mongo"
+  #   ports: 
+  #     - 27017:27017
+  #   networks:
+  #     - the-host-br-network
+  #   container_name: the-host-mongo-container
+  #   volumes:
+  #     - './data:/data/db'
 networks:
   the-host-br-network:
     driver: bridge
