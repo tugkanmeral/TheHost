@@ -1,4 +1,5 @@
-appsettings.*
+appsettings.json
+appsettings.*.json
 *.exe
 bin/
 
