@@ -20,7 +20,7 @@ public class AuthController : ControllerBase
             var token = _authService.GetToken(request.Username, request.Password);
             return Ok(token);
         }
-        catch (System.Exception _)
+        catch (System.Exception)
         {
             return BadRequest("Check your credentails");
         }
