@@ -13,9 +13,16 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("getToken")]
-    public string? GetToken(AuthRequest request)
+    public IActionResult GetToken(AuthRequest request)
     {
-        var token = _authService.GetToken(request.Username, request.Password);
-        return token;
+        try
+        {
+            var token = _authService.GetToken(request.Username, request.Password);
+            return Ok(token);
+        }
+        catch (System.Exception _)
+        {
+            return BadRequest("Check your credentails");
+        }
     }
 }

@@ -17,12 +17,10 @@ public class AuthManager : IAuthService
     }
 
     //TODO: password will be stored as combined hash of username and password
-    public string? GetToken(string username, string password)
+    public UserToken GetToken(string username, string password)
     {
         var user = _userRepository.GetByUsername(username);
-
-        if (user == null)
-            return null;
+        ArgumentNullException.ThrowIfNull(user);
 
         StringBuilder rawPassStrBuilder = new();
         rawPassStrBuilder.Append(username);
@@ -33,7 +31,7 @@ public class AuthManager : IAuthService
         var passwordHash = getHash(sha256Hash, rawPass);
 
         if (!user.Password.Equals(passwordHash))
-            return null;
+            throw new Exception("Check your credentails!");
 
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.ASCII.GetBytes(_appSettings.AuthSecretKey);
@@ -51,8 +49,15 @@ public class AuthManager : IAuthService
         };
         var token = tokenHandler.CreateToken(tokenDescriptor);
         var tokenStr = tokenHandler.WriteToken(token);
+        var refreshToken = getHash(sha256Hash, tokenStr);
 
-        return tokenStr;
+        UserToken userToken = new()
+        {
+            Token = tokenStr,
+            RefreshToken = refreshToken
+        };
+
+        return userToken;
     }
 
     private static string getHash(HashAlgorithm hashAlgorithm, string input)

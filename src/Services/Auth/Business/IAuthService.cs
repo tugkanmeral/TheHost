@@ -1,4 +1,4 @@
 public interface IAuthService
 {
-    string? GetToken(string username, string password);
+    UserToken GetToken(string username, string password);
 }
